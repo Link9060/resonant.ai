@@ -69,7 +69,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .ib.acc{background:var(--accent-dim);border-color:var(--accent-border);color:var(--accent);}
 .ib.acc:hover{background:rgba(232,82,10,.2);}
 .ib-sq{width:30px;padding:0;justify-content:center;}
-#home-screen{overflow:hidden;}
+#home-screen{overflow:hidden;background:transparent;}
 .home-body{flex:1;overflow-y:auto;padding:32px 24px;}
 .h-title{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:800;margin-bottom:4px;}
 .h-sub{font-size:13px;color:var(--text2);margin-bottom:28px;}
@@ -163,12 +163,13 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .mb code{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--bg4);padding:2px 5px;border-radius:3px;color:var(--accent);}
 .mb pre{background:var(--bg);border:1px solid var(--border2);border-left:3px solid var(--accent);border-radius:var(--rs);padding:13px 15px;overflow-x:auto;margin:11px 0;position:relative;}
 .mb pre code{background:none;padding:0;color:#e8c84a;font-size:12px;line-height:1.6;}
-.mb table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13px;border-radius:8px;overflow:hidden;}
-.mb td,.mb th{padding:9px 14px;border:1px solid var(--border2);text-align:left;}
-.mb th{background:var(--bg3);font-weight:600;color:var(--text);font-size:11px;letter-spacing:.5px;text-transform:uppercase;border-bottom:2px solid var(--border2);}
-.mb tr:nth-child(even) td{background:rgba(255,255,255,0.02);}
-.light .mb tr:nth-child(even) td{background:rgba(0,0,0,0.025);}
-.mb tr:hover td{background:var(--accent-dim);transition:background .12s;}
+.mb table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13px;border:1px solid var(--border2);border-radius:8px;overflow:hidden;display:table;}
+.mb td,.mb th{padding:10px 14px;border:none;border-bottom:1px solid var(--border2);text-align:left;line-height:1.4;}
+.mb th{background:var(--bg3);font-weight:700;color:var(--text);font-size:11px;letter-spacing:.6px;text-transform:uppercase;}
+.mb tr:last-child td{border-bottom:none;}
+.mb tbody tr:nth-child(even) td{background:rgba(255,255,255,0.025);}
+.light .mb tbody tr:nth-child(even) td{background:rgba(0,0,0,0.03);}
+.mb tbody tr:hover td{background:var(--accent-dim);}
 .mb ul,.mb ol{margin:8px 0 8px 20px;}.mb li{margin-bottom:4px;}
 .mb h2,.mb h3,.mb h4{font-family:'Space Grotesk',sans-serif;margin:14px 0 7px;}
 .cpb{position:absolute;top:6px;right:6px;background:var(--bg3);border:1px solid var(--border2);color:var(--text2);padding:2px 7px;border-radius:3px;font-size:11px;cursor:pointer;transition:all .18s;}
@@ -375,7 +376,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 /* ── THINK SCREEN ── */
 #think-setup-screen{align-items:center;justify-content:center;}
 .think-accent-var{--think-accent:#7aadff;}
-#think-screen{overflow:hidden;background:var(--bg);}
+#think-screen{overflow:hidden;background:transparent;}
 /* All screens share a subtle dot-grid ambient */
 #think-screen::before,#chat-screen::before,#forge-screen::before,
 #flow-screen::before,#pulse-screen::before,#lens-screen::before,#script-screen::before{
@@ -443,7 +444,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .think-typing span:nth-child(3){animation-delay:.3s;}
 
 /* ── TODO WIDGET ── */
-.todo-tab{position:fixed;left:0;top:50%;margin-top:44px;width:28px;height:80px;background:var(--bg2);border:1px solid var(--tasks-accent,#e8520a);border-left:none;border-radius:0 8px 8px 0;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:500;transition:all .15s;writing-mode:vertical-rl;opacity:.75;}
+
 
 .todo-tab-text{font-size:10px;color:var(--text2);font-weight:600;letter-spacing:.8px;text-transform:uppercase;transform:rotate(180deg);}
 .todo-panel{position:fixed;left:-320px;top:0;bottom:0;width:320px;background:var(--bg2);border-right:1px solid var(--border2);z-index:499;transition:left .25s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:8px 0 32px rgba(0,0,0,.3);}
@@ -552,7 +553,7 @@ body:not(:has(#landing-screen.active)) .land-dock{display:none!important;}
 .land-help-btn{display:none;}
 
 /* ── WORKSPACE SCREEN ── */
-#workspace-screen{align-items:flex-start;justify-content:center;background:var(--bg);}
+#workspace-screen{align-items:flex-start;justify-content:center;background:transparent;}
 #workspace-screen::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(circle,rgba(255,255,255,0.04) 1px,transparent 1px);background-size:28px 28px;-webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 40%,black 20%,transparent 100%);mask-image:radial-gradient(ellipse 80% 80% at 50% 40%,black 20%,transparent 100%);}
 .ws-topbar{height:52px;background:var(--bg2);border-bottom:1px solid var(--border2);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;position:sticky;top:0;z-index:10;}
 .ws-logo{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;letter-spacing:-.3px;}
@@ -592,7 +593,7 @@ body:not(:has(#landing-screen.active)) .land-dock{display:none!important;}
 .ws-stat-lbl{font-size:11px;color:var(--text3);}
 
 /* ── HUB SCREEN ── */
-#hub-screen{align-items:flex-start;justify-content:center;background:var(--bg);}
+#hub-screen{align-items:flex-start;justify-content:center;background:transparent;}
 #hub-screen::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(circle,rgba(255,255,255,0.035) 1px,transparent 1px);background-size:32px 32px;-webkit-mask-image:radial-gradient(ellipse 90% 80% at 50% 40%,black 20%,transparent 100%);mask-image:radial-gradient(ellipse 90% 80% at 50% 40%,black 20%,transparent 100%);}
 
 .hub-header{margin-bottom:32px;}
@@ -645,7 +646,7 @@ body:not(:has(#landing-screen.active)) .land-dock{display:none!important;}
 .think-mode-btn.active .think-mode-icon{filter:drop-shadow(0 0 5px #7aadff);}
 
 /* ── NOTES WIDGET ── */
-.notes-tab{position:fixed;left:0;top:50%;margin-top:-132px;width:28px;height:80px;background:var(--bg2);border:1px solid var(--notes-accent,#b78aff);border-left:none;border-radius:0 8px 8px 0;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:500;transition:all .15s;writing-mode:vertical-rl;opacity:.75;}
+
 
 .notes-tab-text{font-size:10px;color:var(--text2);font-weight:600;letter-spacing:.8px;text-transform:uppercase;}
 .notes-panel{position:fixed;left:-340px;top:0;bottom:0;width:340px;background:var(--bg2);border-right:1px solid var(--border2);z-index:499;transition:left .25s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:8px 0 32px rgba(0,0,0,.3);}
@@ -678,7 +679,7 @@ body:not(:has(#landing-screen.active)) .land-dock{display:none!important;}
 .notes-footer{padding:6px 10px;border-top:1px solid var(--border);font-size:10px;color:var(--text3);flex-shrink:0;}
 
 /* ── JOURNAL PANEL ── */
-.journal-tab{position:fixed;left:0;top:50%;margin-top:-44px;width:28px;height:80px;background:var(--bg2);border:1px solid var(--journal-accent,#7aadff);border-left:none;border-radius:0 8px 8px 0;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:500;transition:all .15s;writing-mode:vertical-rl;opacity:.75;}
+
 .journal-tab:hover{background:var(--bg3);}
 .journal-tab-text{font-size:10px;color:var(--text2);font-weight:600;letter-spacing:.8px;text-transform:uppercase;}
 /* Journal opens as a focus overlay */
@@ -742,6 +743,27 @@ body:not(:has(#landing-screen.active)) .land-dock{display:none!important;}
 .journal-hist-date{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--text3);}
 .journal-hist-preview{font-size:12px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;}
 
+/* ── BUG REPORT ── */
+.bug-report-btn{
+  margin-left:auto;padding:5px 12px;border-radius:6px;
+  background:transparent;border:1px solid var(--border2);
+  color:var(--text3);font-size:12px;text-decoration:none;
+  font-family:inherit;cursor:pointer;transition:all .18s;
+  display:flex;align-items:center;gap:5px;white-space:nowrap;
+}
+.bug-report-btn:hover{border-color:rgba(251,191,36,.5);color:#fbbf24;background:rgba(251,191,36,.08);}
+#global-bug-btn{
+  position:fixed;bottom:80px;right:14px;z-index:9000;
+  width:32px;height:32px;border-radius:50%;
+  background:var(--bg2);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;text-decoration:none;
+  opacity:.4;transition:opacity .18s,transform .18s;
+  box-shadow:0 2px 10px rgba(0,0,0,.25);
+}
+#global-bug-btn:hover{opacity:1;transform:scale(1.15);}
+body:has(#landing-screen.active) #global-bug-btn{display:none;}
+
 /* ── MOUSE-REACTIVE BACKGROUND ── */
 
 /* ── PANEL SLIDE ANIMATION (notes↔todo cross-side) ── */
@@ -772,14 +794,10 @@ body:not(:has(#landing-screen.active)) .land-dock{display:none!important;}
 .panel-sliding-out{animation:slideUp .35s cubic-bezier(.4,0,.2,1) forwards;}
 .panel-sliding-in{animation:slideDown .35s cubic-bezier(.4,0,.2,1) forwards;}
 /* Tab positions - stacked without overlap, LEFT side */
-.notes-tab  { margin-top: -132px !important; }
-.journal-tab{ margin-top: -44px  !important; }
-.todo-tab   { margin-top: 44px   !important; }
+
 
 /* Attached panel look - tabs connect visually to panels */
-.notes-tab{ border-left:none; border-radius:0 8px 8px 0; }
-.journal-tab{ border-left:none; border-radius:0 8px 8px 0; }
-.todo-tab{ border-left:none; border-radius:0 8px 8px 0; }
+
 
 /* RIGHT side */
 .panels-right .notes-tab,
@@ -810,41 +828,59 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
 /* ── PANEL ACCENT COLORS ── */
 :root{--notes-accent:#b78aff;--tasks-accent:#34d399;--journal-accent:#7aadff;}
 
-/* Tab base styles - clean attached look */
+/* Tab base styles — evenly spaced using calc, never clusters */
 .notes-tab,.journal-tab,.todo-tab{
-  position:fixed;left:0;top:50%;width:28px;height:88px;
+  position:fixed;left:0;top:50%;width:26px;height:80px;
   background:var(--bg2);border:1px solid;border-left:none;
   border-radius:0 8px 8px 0;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
   z-index:500;transition:all .2s cubic-bezier(.4,0,.2,1);
-  writing-mode:vertical-rl;opacity:.8;
-  box-shadow:2px 0 12px rgba(0,0,0,.18);
+  writing-mode:vertical-rl;opacity:.78;
+  box-shadow:3px 0 14px rgba(0,0,0,.2);
 }
-.notes-tab{border-color:var(--notes-accent);margin-top:-140px;}
-.journal-tab{border-color:var(--journal-accent);margin-top:-46px;}
-.todo-tab{border-color:var(--tasks-accent);margin-top:48px;}
-.notes-tab:hover,.journal-tab:hover,.todo-tab:hover{opacity:1;width:32px;background:var(--bg3);}
+/*
+  3 tabs × 80px + 2 gaps × 10px = 260px total height
+  Center offset from 50vh: first tab top = -(260/2) = -130px
+  Tab 1 center: -130 + 40 = -90px from 50vh
+  Tab 2 center: -90 + 90 = 0px from 50vh  (80px tab + 10px gap)
+  Tab 3 center: 0 + 90 = +90px from 50vh
+*/
+.notes-tab  { border-color:var(--notes-accent);   margin-top:-130px; }
+.journal-tab{ border-color:var(--journal-accent);  margin-top: -40px; }
+.todo-tab   { border-color:var(--tasks-accent);    margin-top:  50px; }
+.notes-tab:hover,.journal-tab:hover,.todo-tab:hover{opacity:1;width:30px;background:var(--bg3);}
+
+/* RIGHT side */
+.panels-right .notes-tab,
+.panels-right .journal-tab,
+.panels-right .todo-tab{
+  left:auto;right:0;border-left:1px solid;border-right:none;
+  border-radius:8px 0 0 8px;
+  box-shadow:-3px 0 14px rgba(0,0,0,.2);
+}
+.panels-right .notes-panel{left:auto;right:-340px;border-right:none;border-left:1px solid var(--border2);box-shadow:-8px 0 32px rgba(0,0,0,.3);}
+.panels-right .notes-panel.open{left:auto;right:0;}
+.panels-right .todo-panel{left:auto;right:-320px;border-right:none;border-left:1px solid var(--border2);box-shadow:-8px 0 32px rgba(0,0,0,.3);}
+.panels-right .todo-panel.open{left:auto;right:0;}
+.panels-right .tab-color-picker{left:auto;right:36px;}
 
 /* Tab text */
 .notes-tab-text,.journal-tab-text,.todo-tab-text{
   font-size:9px;color:var(--text2);font-weight:700;
   letter-spacing:1.5px;text-transform:uppercase;
 }
-/* Active/open state */
-.notes-panel.open ~ * .notes-tab,
-.notes-tab.panel-open{opacity:1;background:var(--bg3);}
 
 /* Tab shortcut tooltips */
 .notes-tab::after,.todo-tab::after,.journal-tab::after{
-  content:attr(data-tip);position:absolute;left:36px;top:50%;transform:translateY(-50%);
-  background:rgba(0,0,0,.85);color:#fff;font-size:10px;padding:3px 8px;border-radius:5px;
+  content:attr(data-tip);position:absolute;left:34px;top:50%;transform:translateY(-50%);
+  background:rgba(0,0,0,.88);color:#fff;font-size:10px;padding:3px 8px;border-radius:5px;
   white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s;z-index:600;
   font-family:'JetBrains Mono',monospace;writing-mode:horizontal-tb;
-  border:1px solid rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.08);
 }
 .notes-tab:hover::after,.todo-tab:hover::after,.journal-tab:hover::after{opacity:1;}
 .panels-right .notes-tab::after,.panels-right .todo-tab::after,.panels-right .journal-tab::after{
-  left:auto;right:36px;
+  left:auto;right:34px;
 }
 
 /* Panel color picker */
@@ -887,8 +923,8 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
 .accent-sw{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .14px;}
 .accent-sw.active{border-color:#fff;transform:scale(1.15);}
 
-/* ── LAND CARD GRID ── */
-.land-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;width:100%;}
+/* ── LAND CARD GRID — 2 columns ── */
+.land-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;}
 
 </style>
 </head>
@@ -1380,6 +1416,10 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
       Guide
     </button>
     <div class="dock-sep"></div>
+    <a class="dock-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdG0PoDjDYJDFTqRS3nTeHYEvItKmdaXYGcyAKRsVj7p3EnsA/viewform?usp=dialog" target="_blank" style="text-decoration:none;">
+      🐛 Bug Report
+    </a>
+    <div class="dock-sep"></div>
     <button class="dock-btn blue" id="land-hub-btn">
       <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.3"/><rect x="8" y="1" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="8" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.3"/><rect x="8" y="8" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.3"/></svg>
       Hub
@@ -1665,6 +1705,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
     <div class="help-topbar">
       <button class="help-back" id="help-back-btn">← Back</button>
       <div class="help-title">Resonant<i>.</i>AI — Guide</div>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSdG0PoDjDYJDFTqRS3nTeHYEvItKmdaXYGcyAKRsVj7p3EnsA/viewform?usp=dialog" target="_blank" class="bug-report-btn">🐛 Report a Bug</a>
     </div>
 
     <!-- HOW IT WORKS -->
@@ -1695,9 +1736,10 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
     <!-- VOICE & TEXT SIZE -->
     <div class="help-section">
       <div class="help-section-title">Voice & Display</div>
-      <div class="help-tip"><strong>🔊 Text-to-Speech</strong> — Every AI response has a Speak button. The Voice bar at the top of Resonant. Build lets you pick a voice, change speed (0.5× to 2×) and adjust pitch. Your voice preference is saved. Hit ⏹ to stop at any time.</div>
-      <div class="help-tip"><strong>Text size</strong> — Use the − / + buttons next to "Text" in the input toolbar to make the chat text smaller or larger. This persists across sessions.</div>
-      <div class="help-tip"><strong>Dark / Light mode</strong> — Click the ☀ / 🌙 button in any topbar to switch. Light mode includes the same ambient dot-grid background pattern as dark mode.</div>
+      <div class="help-tip"><strong>🔊 Text-to-Speech</strong> — Every AI response has a 🔊 Speak button. A Voice / Speed bar appears above the input in every workspace. Choose a voice, set speed (0.1× for slow dictation pace to 2.5× for fast), and adjust pitch.</div>
+      <div class="help-tip"><strong>★ High Quality Voices (ElevenLabs)</strong> — The top voices in the dropdown (Sarah, Liam, Lily, Daniel, Charlotte, Callum) use <a href="https://elevenlabs.io" target="_blank" style="color:var(--accent);text-decoration:none;">ElevenLabs</a> for studio-quality audio. The first time you click Speak with a ★ voice, you'll be asked for your free ElevenLabs API key. Free tier gives plenty of monthly characters. If you skip it, the best available browser voice is used instead.</div>
+      <div class="help-tip"><strong>Text size</strong> — Use the − / + buttons next to "Text" in the input toolbar to adjust chat text size. This persists across sessions.</div>
+      <div class="help-tip"><strong>Dark / Light mode</strong> — Click ☀ / 🌙 in any topbar. The particle background adapts: white/grey dots on the landing page, colored dots matching each workspace's theme.</div>
     </div>
 
     <!-- TAGGING -->
@@ -1713,10 +1755,19 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
       <div class="help-section-title">Keyboard Shortcuts</div>
       <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:13px;color:var(--text2);align-items:center;">
         <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:12px;white-space:nowrap;">Enter</kbd><span>Send message (Shift+Enter for new line)</span>
+        <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:12px;">` (backtick)</kbd><span>Exit any text box — returns focus to page so panel shortcuts work</span>
         <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:12px;">\ (backslash)</kbd><span>Open / close Notes</span>
         <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:12px;">' (apostrophe)</kbd><span>Open / close Journal</span>
         <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:12px;">/ (slash)</kbd><span>Open / close Tasks</span>
       </div>
+      <div class="help-tip" style="margin-top:14px;"><strong>Note:</strong> Panel shortcuts (\ ' /) only work when you're not typing in an input field. Press <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:1px 5px;border-radius:3px;font-family:monospace;font-size:11px;">` </kbd> first to exit the input, then use the shortcuts.</div>
+    </div>
+
+    <!-- BUG REPORT -->
+    <div class="help-section">
+      <div class="help-section-title">Found a Bug?</div>
+      <div class="help-tip">If something isn't working right, we'd love to know. <a href="https://docs.google.com/forms/d/e/1FAIpQLSdG0PoDjDYJDFTqRS3nTeHYEvItKmdaXYGcyAKRsVj7p3EnsA/viewform?usp=dialog" target="_blank" style="color:var(--accent);text-decoration:none;font-weight:600;">🐛 Submit a bug report →</a></div>
+      <div class="help-tip">You can also find the bug report button in the dock at the bottom of the home screen, in the top corner of this guide, and as a small 🐛 icon in the bottom-right corner on every screen.</div>
     </div>
 
     <!-- TONE & VOICE -->
@@ -2110,7 +2161,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
 </div>
 
 <!-- ── NOTES WIDGET (global) ── -->
-<div class="notes-tab" id="notes-tab" data-tip="' → Notes" style="position:relative;">
+<div class="notes-tab" id="notes-tab" data-tip="\\ → Notes" style="position:relative;">
   <div class="notes-tab-text">Notes</div>
   <div class="tab-color-picker" id="tcp-notes">
     <div class="tcp-label">Notes color</div>
@@ -2379,6 +2430,9 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- Global bug report button — visible on all screens -->
+<a id="global-bug-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdG0PoDjDYJDFTqRS3nTeHYEvItKmdaXYGcyAKRsVj7p3EnsA/viewform?usp=dialog" target="_blank" title="Report a bug">🐛</a>
 
 <script>
 // ── UTILS ──
@@ -3455,6 +3509,14 @@ function wireTodoEvents(){
 
 // ── KEYBOARD SHORTCUTS FOR PANELS ──
 document.addEventListener('keydown', e=>{
+  // Backtick exits any focused input/textarea back to the page
+  if(e.key==='`'){
+    if(['INPUT','TEXTAREA'].includes(e.target.tagName)){
+      e.preventDefault();
+      e.target.blur();
+      return;
+    }
+  }
   if(['INPUT','TEXTAREA'].includes(e.target.tagName)) return;
   if(e.key==='\\'){
     e.preventDefault();
@@ -4633,24 +4695,42 @@ function smartOpenPanel(openingPanel){
 
   // More dots, higher base opacity so they read in both modes
   const COLS=[
-    'rgba(232,82,10,',     // accent orange
-    'rgba(122,173,255,',   // blue
-    'rgba(183,138,255,',   // purple
-    'rgba(52,211,153,',    // green
-    'rgba(251,191,36,',    // yellow
-    'rgba(232,121,249,',   // pink
+    'rgba(232,82,10,',
+    'rgba(122,173,255,',
+    'rgba(183,138,255,',
+    'rgba(52,211,153,',
+    'rgba(251,191,36,',
+    'rgba(232,121,249,',
   ];
 
-  for(let i=0;i<180;i++){
+  const SCREEN_COLORS={
+    'landing-screen':null,          // null = white/black monochrome
+    'home-screen':'232,82,10',
+    'chat-screen':'232,82,10',
+    'think-screen':'122,173,255',
+    'forge-screen':'251,146,60',
+    'flow-screen':'232,121,249',
+    'pulse-screen':'52,211,153',
+    'lens-screen':'251,191,36',
+    'script-screen':'99,179,237',
+    'launch-screen':'251,113,133',
+    'mind-screen':'110,231,183',
+    'connect-screen':'147,197,253',
+    'help-screen':null,
+    'workspace-screen':null,
+    'hub-screen':null,
+  };
+
+  for(let i=0;i<200;i++){
     DOTS.push({
       x:Math.random()*window.innerWidth,
       y:Math.random()*window.innerHeight,
-      vx:(Math.random()-.5)*0.25,
-      vy:(Math.random()-.5)*0.25,
-      r:Math.random()*2.2+0.6,
+      vx:(Math.random()-.5)*0.22,
+      vy:(Math.random()-.5)*0.22,
+      r:Math.random()*1.8+0.5,
       col:COLS[Math.floor(Math.random()*COLS.length)],
-      base:Math.random()*0.35+0.12,   // higher base so dots are always visible
-      phase:Math.random()*Math.PI*2,   // for gentle pulse
+      base:Math.random()*0.28+0.08,
+      phase:Math.random()*Math.PI*2,
     });
   }
 
@@ -4660,32 +4740,45 @@ function smartOpenPanel(openingPanel){
     ctx.clearRect(0,0,W,H);
 
     const isLight=document.body.classList.contains('light');
-    const lightBoost = isLight ? 0.12 : 0;
 
-    // Get current active screen color for themed dots
+    // Detect current screen
     const activeScreen=document.querySelector('.screen.active');
-    let themeColor=null;
-    if(activeScreen){
-      const id=activeScreen.id;
-      const colorMap={'chat-screen':'232,82,10','think-screen':'122,173,255','forge-screen':'251,146,60','flow-screen':'232,121,249','pulse-screen':'52,211,153','lens-screen':'251,191,36','script-screen':'99,179,237','launch-screen':'251,113,133','mind-screen':'110,231,183','connect-screen':'147,197,253'};
-      themeColor=colorMap[id]||null;
-    }
+    const screenId=activeScreen?activeScreen.id:'landing-screen';
+    const themeColor = SCREEN_COLORS.hasOwnProperty(screenId) ? SCREEN_COLORS[screenId] : null;
+    const isMonochrome = (screenId==='landing-screen'||screenId==='help-screen'||screenId==='workspace-screen'||screenId==='hub-screen');
 
-    // Draw connecting lines between nearby dots first (under dots)
+    // Monochrome dot color
+    const monoCol = isLight ? '30,30,30,' : '220,220,220,';
+
+    // Light mode: much fewer/dimmer dots
+    const lightMult = isLight ? 0.35 : 1.0;
+
+    // Draw connecting lines first — they light up near mouse
     for(let i=0;i<DOTS.length;i++){
       for(let j=i+1;j<DOTS.length;j++){
         const dx=DOTS[i].x-DOTS[j].x, dy=DOTS[i].y-DOTS[j].y;
-        const dist=Math.sqrt(dx*dx+dy*dy);
-        if(dist<110){
-          const alpha=(1-dist/110)*(isLight?0.12:0.08);
-          const col=themeColor||DOTS[i].col.slice(5,-1);
-          ctx.beginPath();
-          ctx.moveTo(DOTS[i].x,DOTS[i].y);
-          ctx.lineTo(DOTS[j].x,DOTS[j].y);
-          ctx.strokeStyle=`rgba(${col},${alpha})`;
-          ctx.lineWidth=0.8;
-          ctx.stroke();
-        }
+        const dist2=dx*dx+dy*dy;
+        if(dist2>12100) continue; // 110px^2
+        const dist=Math.sqrt(dist2);
+
+        // Mouse proximity for line (mid-point of line)
+        const midX=(DOTS[i].x+DOTS[j].x)/2, midY=(DOTS[i].y+DOTS[j].y)/2;
+        const mdist=Math.hypot(midX-mx,midY-my);
+        const lineGlow=Math.max(0,1-mdist/280);
+
+        const baseAlpha=(1-dist/110)*(isLight?0.06:0.07)*lightMult;
+        const glowAlpha=lineGlow*0.35*(isLight?0.4:1);
+        const alpha=Math.min(0.9, baseAlpha+glowAlpha);
+
+        const col = isMonochrome ? (isLight?'30,30,30':'200,200,200') : (themeColor||DOTS[i].col.slice(5,-1).replace(',','').trim()+'');
+        const lineCol = isMonochrome ? (isLight?'30,30,30':'200,200,200') : (themeColor||(DOTS[i].col+'0)').match(/\d+,\d+,\d+/)?.[0]||'180,180,180');
+
+        ctx.beginPath();
+        ctx.moveTo(DOTS[i].x,DOTS[i].y);
+        ctx.lineTo(DOTS[j].x,DOTS[j].y);
+        ctx.strokeStyle=`rgba(${lineCol},${alpha})`;
+        ctx.lineWidth= lineGlow>0.05 ? 1.2 : 0.7;
+        ctx.stroke();
       }
     }
 
@@ -4695,19 +4788,20 @@ function smartOpenPanel(openingPanel){
       if(d.y<0)d.y=H; if(d.y>H)d.y=0;
 
       const mdist=Math.hypot(d.x-mx,d.y-my);
-      const glow=Math.max(0,1-mdist/320);
-      const pulse=Math.sin(frame*0.012+d.phase)*0.06;
-      const alpha=Math.min(1, d.base+lightBoost+glow*0.75+pulse);
-      const size=d.r+glow*5;
+      const glow=Math.max(0,1-mdist/300);
+      const pulse=Math.sin(frame*0.01+d.phase)*0.05;
 
-      // Use theme color if on a specific workspace screen
-      const dotCol = themeColor ? `rgba(${themeColor},` : d.col;
+      const rawAlpha=(d.base+glow*0.8+pulse)*lightMult;
+      const alpha=Math.min(0.95, rawAlpha);
+      const size=d.r+(glow*4.5);
 
-      if(glow>0.02){
-        const grd=ctx.createRadialGradient(d.x,d.y,0,d.x,d.y,size*8);
-        grd.addColorStop(0,dotCol+(alpha*0.5)+')');
+      const dotCol = isMonochrome ? `rgba(${monoCol}` : (themeColor ? `rgba(${themeColor},` : d.col);
+
+      if(glow>0.03){
+        const grd=ctx.createRadialGradient(d.x,d.y,0,d.x,d.y,size*7);
+        grd.addColorStop(0,dotCol+(alpha*0.55*(isLight?0.5:1))+')');
         grd.addColorStop(1,dotCol+'0)');
-        ctx.beginPath();ctx.arc(d.x,d.y,size*8,0,Math.PI*2);
+        ctx.beginPath();ctx.arc(d.x,d.y,size*7,0,Math.PI*2);
         ctx.fillStyle=grd;ctx.fill();
       }
 
@@ -4716,11 +4810,12 @@ function smartOpenPanel(openingPanel){
       ctx.fill();
     });
 
-    // Mouse spotlight
-    const mg=ctx.createRadialGradient(mx,my,0,mx,my,260);
-    const spotAlpha=isLight?0.025:0.055;
-    mg.addColorStop(0,`rgba(232,82,10,${spotAlpha})`);
-    mg.addColorStop(1,'rgba(232,82,10,0)');
+    // Mouse spotlight — always uses current theme color
+    const spotRGB = isMonochrome ? (isLight?'30,30,30':'200,200,200') : (themeColor||'232,82,10');
+    const spotAlpha=isLight?0.018:0.05;
+    const mg=ctx.createRadialGradient(mx,my,0,mx,my,240);
+    mg.addColorStop(0,`rgba(${spotRGB},${spotAlpha})`);
+    mg.addColorStop(1,`rgba(${spotRGB},0)`);
     ctx.fillStyle=mg;ctx.fillRect(0,0,W,H);
 
     requestAnimationFrame(draw);
@@ -4728,104 +4823,176 @@ function smartOpenPanel(openingPanel){
   draw();
 })();
 
-// ── TEXT-TO-SPEECH ──
-let ttsVoices=[];let currentUtterance=null;
-function loadVoices(){
-  ttsVoices=window.speechSynthesis.getVoices();
-  if(!ttsVoices.length) return;
-  // Prefer natural-sounding voices: Google, Daniel, Samantha, Alex
-  const preferred=['Google UK English Female','Google US English','Samantha','Daniel','Alex','Karen'];
-  ttsVoices.sort((a,b)=>{
-    const ai=preferred.findIndex(p=>a.name.includes(p));
-    const bi=preferred.findIndex(p=>b.name.includes(p));
-    if(ai===-1&&bi===-1)return 0;
-    if(ai===-1)return 1;
-    if(bi===-1)return -1;
-    return ai-bi;
-  });
-  const saved=localStorage.getItem('r_tts_voice')||'';
-  // Populate main TTS bar
-  const sel=$('tts-voice');
-  if(sel){
+// ── TEXT-TO-SPEECH — ElevenLabs + Web Speech fallback ──
+let ttsVoices=[];
+const EL_VOICES=[
+  {id:'EXAVITQu4vr4xnSDxMaL', name:'Sarah (Natural)'},
+  {id:'TX3LPaxmHKxFdv7VOQHJ', name:'Liam (Clear)'},
+  {id:'pFZP5JQG7iQjIQuC4Bku', name:'Lily (Friendly)'},
+  {id:'onwK4e9ZLuTAKqWW03F9', name:'Daniel (Deep)'},
+  {id:'XB0fDUnXU5powFXDhCwa', name:'Charlotte (Warm)'},
+  {id:'N2lVS1w4EtoT3dr4eOWO', name:'Callum (Crisp)'},
+];
+let elApiKey='';
+let useElevenLabs=false;
+
+function populateVoiceSelects(){
+  const wsVoices=[...EL_VOICES.map((v,i)=>({id:'el_'+i, name:'★ '+v.name})),
+    ...ttsVoices.map((v,i)=>({id:'ws_'+i, name:v.name+' ('+v.lang+')'}))];
+
+  const saved=localStorage.getItem('r_tts_voice')||'el_0';
+  [document.getElementById('tts-voice'),...document.querySelectorAll('.ws-voice-sel')].forEach(sel=>{
+    if(!sel) return;
     sel.innerHTML='';
-    ttsVoices.forEach((v,i)=>{
+    // ElevenLabs group
+    const grpEl=document.createElement('optgroup');
+    grpEl.label='★ High Quality (needs ElevenLabs key)';
+    EL_VOICES.forEach((v,i)=>{
       const o=document.createElement('option');
-      o.value=i;o.textContent=v.name+' ('+v.lang+')';
-      if(v.name===saved)o.selected=true;
-      sel.appendChild(o);
+      o.value='el_'+i; o.textContent=v.name;
+      if(saved==='el_'+i) o.selected=true;
+      grpEl.appendChild(o);
     });
-  }
-  // Populate all workspace voice selects
-  document.querySelectorAll('.ws-voice-sel').forEach(s=>{
-    s.innerHTML='';
-    ttsVoices.forEach((v,i)=>{
-      const o=document.createElement('option');
-      o.value=i;o.textContent=v.name;
-      if(v.name===saved)o.selected=true;
-      s.appendChild(o);
-    });
-    s.addEventListener('change',()=>{
-      localStorage.setItem('r_tts_voice',ttsVoices[parseInt(s.value)||0]?.name||'');
-      // Sync all selects
-      document.querySelectorAll('.ws-voice-sel,#tts-voice').forEach(x=>{
-        if(x!==s)x.value=s.value;
+    sel.appendChild(grpEl);
+    // Browser voices group
+    if(ttsVoices.length){
+      const grpBr=document.createElement('optgroup');
+      grpBr.label='Browser Voices';
+      ttsVoices.forEach((v,i)=>{
+        const o=document.createElement('option');
+        o.value='ws_'+i; o.textContent=v.name+' ('+v.lang+')';
+        if(saved==='ws_'+i) o.selected=true;
+        grpBr.appendChild(o);
       });
+      sel.appendChild(grpBr);
+    }
+    sel.addEventListener('change',()=>{
+      const val=sel.value;
+      localStorage.setItem('r_tts_voice',val);
+      document.querySelectorAll('.ws-voice-sel,#tts-voice').forEach(x=>{if(x!==sel)x.value=val;});
     });
   });
 }
+
+function loadVoices(){
+  const raw=window.speechSynthesis.getVoices();
+  if(!raw.length) return;
+  // Prefer the best-sounding browser voices
+  const preferred=['Google UK English Female','Google US English','Samantha','Daniel','Karen','Moira','Tessa'];
+  ttsVoices=[...raw].sort((a,b)=>{
+    const ai=preferred.findIndex(p=>a.name.includes(p));
+    const bi=preferred.findIndex(p=>b.name.includes(p));
+    if(ai===-1&&bi===-1) return 0;
+    if(ai===-1) return 1; if(bi===-1) return -1;
+    return ai-bi;
+  });
+  populateVoiceSelects();
+}
 window.speechSynthesis.onvoiceschanged=loadVoices;
 setTimeout(loadVoices,300);
+
+// ElevenLabs key — check localStorage or prompt
+elApiKey=localStorage.getItem('r_el_key')||'';
 
 // Wire ws speed sliders
 document.querySelectorAll('.ws-rate-sl').forEach(sl=>{
   const valEl=sl.nextElementSibling;
   sl.addEventListener('input',()=>{
-    if(valEl)valEl.textContent=parseFloat(sl.value).toFixed(2).replace(/\.?0+$/,'')+'×';
-    // Sync main slider too
-    const main=$('tts-rate');
-    if(main){main.value=sl.value;const mv=$('tts-rate-val');if(mv)mv.textContent=sl.value+'×';}
+    const v=parseFloat(sl.value).toFixed(sl.value<1?2:1).replace(/\.0$/,'');
+    if(valEl) valEl.textContent=v+'×';
+    const main=document.getElementById('tts-rate');
+    if(main){ main.value=sl.value; const mv=document.getElementById('tts-rate-val'); if(mv) mv.textContent=v+'×'; }
   });
 });
 
-const ttsRate=$('tts-rate'),ttsPitch=$('tts-pitch'),ttsRateVal=$('tts-rate-val');
-if(ttsRate) ttsRate.addEventListener('input',()=>{
-  ttsRateVal.textContent=parseFloat(ttsRate.value).toFixed(2).replace(/\.?0+$/,'')+'×';
-  document.querySelectorAll('.ws-rate-sl').forEach(s=>s.value=ttsRate.value);
+const ttsRateEl=document.getElementById('tts-rate');
+const ttsPitchEl=document.getElementById('tts-pitch');
+const ttsRateValEl=document.getElementById('tts-rate-val');
+if(ttsRateEl) ttsRateEl.addEventListener('input',()=>{
+  const v=parseFloat(ttsRateEl.value).toFixed(ttsRateEl.value<1?2:1).replace(/\.0$/,'');
+  if(ttsRateValEl) ttsRateValEl.textContent=v+'×';
+  document.querySelectorAll('.ws-rate-sl').forEach(s=>s.value=ttsRateEl.value);
 });
 
-document.querySelectorAll('[id="ws-tts-stop"],.tts-stop').forEach(btn=>{
-  btn.addEventListener('click',stopTTS);
-});
-if($('tts-stop-btn'))$('tts-stop-btn').addEventListener('click',stopTTS);
+document.querySelectorAll('[id="ws-tts-stop"]').forEach(btn=>btn.addEventListener('click',stopTTS));
+const stopBtn=document.getElementById('tts-stop-btn');
+if(stopBtn) stopBtn.addEventListener('click',stopTTS);
 
 function stopTTS(){
   window.speechSynthesis.cancel();
   document.querySelectorAll('.speak-btn').forEach(b=>{b.classList.remove('speaking');b.textContent='🔊 Speak';});
 }
 
-function getCurrentRate(){
-  // Use ws slider if available, else main
+function getSelectedVoice(){
+  const sel=document.querySelector('.ws-voice-sel')||document.getElementById('tts-voice');
+  return sel ? sel.value : 'el_0';
+}
+function getRate(){
   const sl=document.querySelector('.ws-rate-sl');
-  return sl?parseFloat(sl.value):( ttsRate?parseFloat(ttsRate.value):1 );
+  return sl ? parseFloat(sl.value) : (ttsRateEl ? parseFloat(ttsRateEl.value) : 1);
 }
 
-function getVoiceIndex(){
-  const sel=document.querySelector('.ws-voice-sel')||$('tts-voice');
-  return sel?parseInt(sel.value)||0:0;
-}
-
-function speakText(text,btn){
+async function speakText(text,btn){
   window.speechSynthesis.cancel();
   document.querySelectorAll('.speak-btn').forEach(b=>{b.classList.remove('speaking');b.textContent='🔊 Speak';});
-  const clean=text.replace(/[*#`_~]/g,'').replace(/```[\s\S]*?```/g,'[code block]').replace(/<[^>]*>/g,'').substring(0,2500);
+  if(btn){btn.classList.add('speaking');btn.textContent='🔊 Speaking…';}
+
+  const clean=text.replace(/[*#`_~]/g,'').replace(/```[\s\S]*?```/g,'[code block]').replace(/<[^>]*>/g,'').trim().substring(0,3000);
+  const voiceKey=getSelectedVoice();
+  localStorage.setItem('r_tts_voice',voiceKey);
+
+  // Try ElevenLabs if selected and key available
+  if(voiceKey.startsWith('el_')){
+    const vIdx=parseInt(voiceKey.replace('el_',''))||0;
+    const voice=EL_VOICES[vIdx];
+    const key=elApiKey||localStorage.getItem('r_el_key')||'';
+    if(key && voice){
+      try{
+        const res=await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voice.id}/stream`,{
+          method:'POST',
+          headers:{'xi-api-key':key,'Content-Type':'application/json','Accept':'audio/mpeg'},
+          body:JSON.stringify({
+            text:clean,
+            model_id:'eleven_turbo_v2_5',
+            voice_settings:{stability:0.45,similarity_boost:0.82,style:0.3,use_speaker_boost:true},
+          })
+        });
+        if(res.ok){
+          const blob=await res.blob();
+          const url=URL.createObjectURL(blob);
+          const audio=new Audio(url);
+          audio.playbackRate=Math.min(2,Math.max(0.5,getRate()));
+          audio.onended=()=>{if(btn){btn.classList.remove('speaking');btn.textContent='🔊 Speak';}URL.revokeObjectURL(url);};
+          audio.onerror=()=>{if(btn){btn.classList.remove('speaking');btn.textContent='🔊 Speak';}};
+          await audio.play();
+          return;
+        } else if(res.status===401){
+          toast('⚠️ ElevenLabs key invalid — falling back to browser voice');
+          localStorage.removeItem('r_el_key'); elApiKey='';
+        }
+      }catch(e){ console.warn('ElevenLabs TTS error',e); }
+    } else if(!key){
+      // No ElevenLabs key — prompt once
+      const k=prompt('Enter your ElevenLabs API key for high-quality voices (free tier available at elevenlabs.io), or cancel to use browser voice:','');
+      if(k&&k.trim()){
+        elApiKey=k.trim(); localStorage.setItem('r_el_key',elApiKey);
+        return speakText(text,btn); // retry with key
+      }
+      // fall through to browser TTS
+    }
+  }
+
+  // Browser Web Speech fallback
   const u=new SpeechSynthesisUtterance(clean);
-  if(ttsVoices.length)u.voice=ttsVoices[getVoiceIndex()];
-  u.rate=getCurrentRate();
-  u.pitch=ttsPitch?parseFloat(ttsPitch.value):1;
-  localStorage.setItem('r_tts_voice',ttsVoices[getVoiceIndex()]?.name||'');
+  if(voiceKey.startsWith('ws_')){
+    const vi=parseInt(voiceKey.replace('ws_',''))||0;
+    if(ttsVoices[vi]) u.voice=ttsVoices[vi];
+  } else if(ttsVoices.length){
+    u.voice=ttsVoices[0]; // best browser voice
+  }
+  u.rate=getRate(); u.pitch=ttsPitchEl?parseFloat(ttsPitchEl.value):1;
   u.onend=()=>{if(btn){btn.classList.remove('speaking');btn.textContent='🔊 Speak';}};
   u.onerror=()=>{if(btn){btn.classList.remove('speaking');btn.textContent='🔊 Speak';}};
-  if(btn){btn.classList.add('speaking');btn.textContent='🔊 Speaking…';}
   window.speechSynthesis.speak(u);
 }
 
