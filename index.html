@@ -743,7 +743,116 @@ body:not(:has(#landing-screen.active)) .land-dock{display:none!important;}
 .journal-hist-date{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--text3);}
 .journal-hist-preview{font-size:12px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;}
 
-/* ── BUG REPORT ── */
+/* ── BETA BADGE ── */
+.beta-badge{
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;
+  letter-spacing:.5px;text-transform:lowercase;
+  background:var(--accent-dim);border:1px solid var(--accent-border);
+  color:var(--accent);padding:2px 7px;border-radius:20px;
+  vertical-align:middle;margin-left:10px;
+  position:relative;top:-6px;
+  -webkit-text-fill-color:var(--accent);
+  animation:betaPulse 3s ease-in-out infinite;
+}
+@keyframes betaPulse{0%,100%{opacity:1;}50%{opacity:.65;}}
+
+/* ── THEME TRANSITION — canvas-only, no DOM overlay ── */
+/* Body fades smoothly between light/dark */
+body{transition:background .4s ease,color .3s ease;}
+
+/* ── SCREEN TRANSITIONS ── */
+.screen-enter{animation:screenEnter .45s cubic-bezier(.4,0,.2,1) forwards;}
+.screen-exit{animation:screenExit .35s cubic-bezier(.4,0,.2,1) forwards;}
+@keyframes screenEnter{
+  0%{opacity:0;transform:scale(1.018);}
+  100%{opacity:1;transform:scale(1);}
+}
+@keyframes screenExit{
+  0%{opacity:1;transform:scale(1);}
+  100%{opacity:0;transform:scale(.985);}
+}
+
+/* ── CARD LAUNCH (color seep from card) ── */
+#card-seep{
+  position:fixed;pointer-events:none;z-index:99998;
+  border-radius:14px;opacity:0;
+  transition:none;
+  /* Start fully invisible and out of the way */
+  width:0;height:0;left:-9999px;top:-9999px;
+}
+#card-seep.seep-active{
+  animation:seepExpand .55s cubic-bezier(.35,0,.15,1) forwards;
+}
+@keyframes seepExpand{
+  0%{transform:scale(1);opacity:.85;border-radius:14px;}
+  70%{opacity:.5;}
+  100%{transform:scale(45);opacity:0;border-radius:50%;}
+}
+#card-seep.seep-return{
+  animation:seepReturn .5s cubic-bezier(.4,0,.25,1) forwards;
+}
+@keyframes seepReturn{
+  0%{transform:scale(45);opacity:0;border-radius:50%;}
+  40%{opacity:.6;}
+  100%{transform:scale(1);opacity:0;border-radius:14px;}
+}
+
+/* ── PANEL WAVE DISTORTION ── */
+@keyframes waveIn{
+  0%{clip-path:ellipse(0% 60% at 0% 50%);}
+  100%{clip-path:ellipse(200% 120% at 0% 50%);}
+}
+@keyframes waveOut{
+  0%{clip-path:ellipse(200% 120% at 0% 50%);}
+  100%{clip-path:ellipse(0% 60% at 0% 50%);}
+}
+.notes-panel.wave-open{animation:waveIn .3s cubic-bezier(.4,0,.2,1) forwards;}
+.todo-panel.wave-open{animation:waveIn .3s cubic-bezier(.4,0,.2,1) forwards;}
+
+/* Canvas ripple effect drawn via JS — no extra CSS needed */
+
+/* ── SCROLL TO TOP on screen change ── */
+.screen{scroll-behavior:smooth;}
+
+/* ── MESSAGE APPEAR ── */
+@keyframes msgAppear{
+  0%{opacity:0;transform:translateY(8px);}
+  100%{opacity:1;transform:translateY(0);}
+}
+.msg,.think-msg-wrap{animation:msgAppear .22s ease forwards;}
+
+/* ── WORKSPACE CARD HOVER LIFT ── */
+.land-card{transform-origin:center bottom;}
+.land-card:hover{transform:translateY(-5px) scale(1.013);}
+
+/* ── SMOOTH SIDEBAR TAB SWITCH ── */
+.sb-tab{transition:all .18s cubic-bezier(.4,0,.2,1);}
+
+/* ── DOCK APPEAR on landing ── */
+@keyframes dockSlideUp{
+  0%{transform:translateX(-50%) translateY(24px);opacity:0;}
+  100%{transform:translateX(-50%) translateY(0);opacity:1;}
+}
+.land-dock{animation:dockSlideUp .6s .3s cubic-bezier(.4,0,.2,1) both;}
+
+/* ── LANDING CARDS STAGGER ── */
+.land-card:nth-child(1){animation-delay:.05s;}
+.land-card:nth-child(2){animation-delay:.1s;}
+.land-card:nth-child(3){animation-delay:.15s;}
+.land-card:nth-child(4){animation-delay:.2s;}
+.land-card:nth-child(5){animation-delay:.25s;}
+.land-card:nth-child(6){animation-delay:.3s;}
+.land-card:nth-child(7){animation-delay:.35s;}
+.land-card:nth-child(8){animation-delay:.4s;}
+.land-card:nth-child(9){animation-delay:.45s;}
+.land-card:nth-child(10){animation-delay:.5s;}
+@keyframes cardDrop{
+  0%{opacity:0;transform:translateY(18px);}
+  100%{opacity:1;transform:translateY(0);}
+}
+#landing-screen.active .land-card{
+  animation:cardDrop .42s cubic-bezier(.4,0,.2,1) both;
+}
 .bug-report-btn{
   margin-left:auto;padding:5px 12px;border-radius:6px;
   background:transparent;border:1px solid var(--border2);
@@ -936,7 +1045,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
   <div class="land-scroll">
     <div class="land-wrap">
       <div style="text-align:center;">
-        <div class="land-logo">Resonant<i>.</i>AI</div>
+        <div class="land-logo">Resonant<i>.</i>AI<span class="beta-badge">beta</span></div>
         <svg class="land-wave" viewBox="0 0 80 16" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M0 8 C10 8, 10 2, 20 2 S30 14, 40 14 S50 2, 60 2 S70 8, 80 8" stroke="rgba(255,255,255,0.18)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
         </svg>
@@ -2109,7 +2218,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
 <!-- ── JOURNAL WIDGET (global) ── -->
 <canvas id="bg-canvas"></canvas>
 
-<div class="journal-tab" id="journal-tab" data-tip="' → Journal" style="position:relative;">
+<div class="journal-tab" id="journal-tab" data-tip="' → Journal">
   <div class="journal-tab-text">Journal</div>
   <div class="tab-color-picker" id="tcp-journal">
     <div class="tcp-label">Journal color</div>
@@ -2161,7 +2270,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
 </div>
 
 <!-- ── NOTES WIDGET (global) ── -->
-<div class="notes-tab" id="notes-tab" data-tip="\\ → Notes" style="position:relative;">
+<div class="notes-tab" id="notes-tab" data-tip="\\ → Notes">
   <div class="notes-tab-text">Notes</div>
   <div class="tab-color-picker" id="tcp-notes">
     <div class="tcp-label">Notes color</div>
@@ -2206,7 +2315,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
 </div>
 
 <!-- ── TODO WIDGET (global) ── -->
-<div class="todo-tab" id="todo-tab" data-tip="/ → Tasks" style="position:relative;">
+<div class="todo-tab" id="todo-tab" data-tip="/ → Tasks">
   <div class="todo-tab-text">Tasks</div>
   <div class="tab-color-picker" id="tcp-tasks">
     <div class="tcp-label">Tasks color</div>
@@ -2430,6 +2539,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
 </div>
 
 <div class="toast" id="toast"></div>
+<div id="card-seep"></div>
 
 <!-- Global bug report button — visible on all screens -->
 <a id="global-bug-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdG0PoDjDYJDFTqRS3nTeHYEvItKmdaXYGcyAKRsVj7p3EnsA/viewform?usp=dialog" target="_blank" title="Report a bug">🐛</a>
@@ -3166,12 +3276,14 @@ function doExportCSV(){
 function insertFormula(){const b=$('input-box');b.value+='```\n\n```';b.focus();}
 
 // ── UTILS ──
-function goHome(){setScreen('home-screen');setAccent('#e8520a');renderProjs();rpOpen=false;geoOpen=false;$('right-panel').classList.remove('show');$('geo-panel').classList.remove('show');}
+function goHome(){setScreen('home-screen');setAccent('#e8520a');window._currentAccentRGB='232,82,10';window._lastSeepColor='#e8520a';renderProjs();rpOpen=false;geoOpen=false;$('right-panel').classList.remove('show');$('geo-panel').classList.remove('show');}
 function setAccent(color){
   document.documentElement.style.setProperty('--accent',color);
   const r=parseInt(color.slice(1,3),16),g=parseInt(color.slice(3,5),16),b=parseInt(color.slice(5,7),16);
   document.documentElement.style.setProperty('--accent-dim',`rgba(${r},${g},${b},0.12)`);
   document.documentElement.style.setProperty('--accent-border',`rgba(${r},${g},${b},0.35)`);
+  // Store for canvas theming
+  window._currentAccentRGB=`${r},${g},${b}`;
 }
 function toggleTheme(){
   isDark=!isDark;
@@ -4703,24 +4815,6 @@ function smartOpenPanel(openingPanel){
     'rgba(232,121,249,',
   ];
 
-  const SCREEN_COLORS={
-    'landing-screen':null,          // null = white/black monochrome
-    'home-screen':'232,82,10',
-    'chat-screen':'232,82,10',
-    'think-screen':'122,173,255',
-    'forge-screen':'251,146,60',
-    'flow-screen':'232,121,249',
-    'pulse-screen':'52,211,153',
-    'lens-screen':'251,191,36',
-    'script-screen':'99,179,237',
-    'launch-screen':'251,113,133',
-    'mind-screen':'110,231,183',
-    'connect-screen':'147,197,253',
-    'help-screen':null,
-    'workspace-screen':null,
-    'hub-screen':null,
-  };
-
   for(let i=0;i<200;i++){
     DOTS.push({
       x:Math.random()*window.innerWidth,
@@ -4744,8 +4838,11 @@ function smartOpenPanel(openingPanel){
     // Detect current screen
     const activeScreen=document.querySelector('.screen.active');
     const screenId=activeScreen?activeScreen.id:'landing-screen';
-    const themeColor = SCREEN_COLORS.hasOwnProperty(screenId) ? SCREEN_COLORS[screenId] : null;
-    const isMonochrome = (screenId==='landing-screen'||screenId==='help-screen'||screenId==='workspace-screen'||screenId==='hub-screen');
+    // For chat-screen, use the project's actual color not hardcoded orange
+    const dynamicChatColor = screenId==='chat-screen' ? (window._currentAccentRGB||'232,82,10') : null;
+    const SCREEN_COLOR_MAP={'think-screen':'122,173,255','forge-screen':'251,146,60','flow-screen':'232,121,249','pulse-screen':'52,211,153','lens-screen':'251,191,36','script-screen':'99,179,237','launch-screen':'251,113,133','mind-screen':'110,231,183','connect-screen':'147,197,253','home-screen':'232,82,10'};
+    const themeColor = dynamicChatColor || SCREEN_COLOR_MAP[screenId] || null;
+    const isMonochrome = (screenId==='landing-screen'||screenId==='help-screen'||screenId==='workspace-screen'||screenId==='hub-screen'||screenId==='setup-screen'||screenId==='think-setup-screen');
 
     // Monochrome dot color
     const monoCol = isLight ? '30,30,30,' : '220,220,220,';
@@ -4758,26 +4855,26 @@ function smartOpenPanel(openingPanel){
       for(let j=i+1;j<DOTS.length;j++){
         const dx=DOTS[i].x-DOTS[j].x, dy=DOTS[i].y-DOTS[j].y;
         const dist2=dx*dx+dy*dy;
-        if(dist2>12100) continue; // 110px^2
+        if(dist2>7056) continue; // 84px max distance (was 110)
         const dist=Math.sqrt(dist2);
 
         // Mouse proximity for line (mid-point of line)
         const midX=(DOTS[i].x+DOTS[j].x)/2, midY=(DOTS[i].y+DOTS[j].y)/2;
         const mdist=Math.hypot(midX-mx,midY-my);
-        const lineGlow=Math.max(0,1-mdist/280);
+        const lineGlow=Math.max(0,1-mdist/260);
 
-        const baseAlpha=(1-dist/110)*(isLight?0.06:0.07)*lightMult;
-        const glowAlpha=lineGlow*0.35*(isLight?0.4:1);
-        const alpha=Math.min(0.9, baseAlpha+glowAlpha);
+        const baseAlpha=(1-dist/84)*(isLight?0.05:0.055)*lightMult;
+        const glowAlpha=lineGlow*0.3*(isLight?0.35:1);
+        const alpha=Math.min(0.85, baseAlpha+glowAlpha);
+        if(alpha<0.01) continue;
 
-        const col = isMonochrome ? (isLight?'30,30,30':'200,200,200') : (themeColor||DOTS[i].col.slice(5,-1).replace(',','').trim()+'');
         const lineCol = isMonochrome ? (isLight?'30,30,30':'200,200,200') : (themeColor||(DOTS[i].col+'0)').match(/\d+,\d+,\d+/)?.[0]||'180,180,180');
 
         ctx.beginPath();
         ctx.moveTo(DOTS[i].x,DOTS[i].y);
         ctx.lineTo(DOTS[j].x,DOTS[j].y);
         ctx.strokeStyle=`rgba(${lineCol},${alpha})`;
-        ctx.lineWidth= lineGlow>0.05 ? 1.2 : 0.7;
+        ctx.lineWidth= lineGlow>0.08 ? 1.0 : 0.5;
         ctx.stroke();
       }
     }
@@ -4817,6 +4914,36 @@ function smartOpenPanel(openingPanel){
     mg.addColorStop(0,`rgba(${spotRGB},${spotAlpha})`);
     mg.addColorStop(1,`rgba(${spotRGB},0)`);
     ctx.fillStyle=mg;ctx.fillRect(0,0,W,H);
+
+    // ── Canvas ripples (theme switch, panel open) ──
+    if(window._getCanvasRipples){
+      window._getCanvasRipples().forEach(r=>{
+        const rg=ctx.createRadialGradient(r.x,r.y,Math.max(0,r.r-30),r.x,r.y,r.r);
+        rg.addColorStop(0,`rgba(${r.color},0)`);
+        rg.addColorStop(0.5,`rgba(${r.color},${r.alpha})`);
+        rg.addColorStop(1,`rgba(${r.color},0)`);
+        ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,Math.PI*2);
+        ctx.fillStyle=rg;ctx.fill();
+      });
+      window._tickRipples&&window._tickRipples();
+    }
+
+    // ── Panel wave distortion (dots near panel edge oscillate) ──
+    if(window._getPanelWave){
+      const pw=window._getPanelWave();
+      if(pw.active){
+        const edgeX=pw.side==='left'?0:W;
+        const t=pw.time;
+        DOTS.forEach(d=>{
+          const dx=Math.abs(d.x-edgeX);
+          if(dx<180){
+            const wave=Math.sin((d.y/60)-(t*0.25))*Math.max(0,(1-dx/180))*6;
+            d.y+=wave*0.08;
+          }
+        });
+        window._tickPanelWave&&window._tickPanelWave();
+      }
+    }
 
     requestAnimationFrame(draw);
   }
@@ -5020,6 +5147,228 @@ function removeTagFromMsg(msgId,tag){
   refreshTagSearch();
   toast('Tag removed');
 }
+
+// ══════════════════════════════════════════════════════════
+// ── ANIMATION ENGINE ──
+// ══════════════════════════════════════════════════════════
+
+// ── CANVAS RIPPLES STATE ──
+let canvasRipples=[];
+function addCanvasRipple(x,y,color){
+  canvasRipples.push({x,y,r:0,maxR:Math.hypot(window.innerWidth,window.innerHeight),alpha:0.22,color,born:Date.now()});
+}
+
+// ── THEME RIPPLE — canvas only, no DOM overlay ──
+function triggerThemeRipple(x,y,toDark){
+  // Just fire multiple canvas ripples for a wave effect
+  const col = toDark ? '220,220,220' : '30,30,30';
+  for(let i=0;i<3;i++){
+    setTimeout(()=>addCanvasRipple(x,y,col),i*80);
+  }
+}
+
+// ── CARD SEEP ── 
+let _seepTimer=null;
+function triggerCardSeep(cardEl, color){
+  if(!cardEl) return;
+  const seep=$('card-seep');
+  if(!seep) return;
+
+  // Cancel any in-progress seep
+  if(_seepTimer){ clearTimeout(_seepTimer); _seepTimer=null; }
+  seep.classList.remove('seep-active','seep-return');
+
+  const rect=cardEl.getBoundingClientRect();
+  // Position and size the seep element
+  seep.style.cssText=`
+    left:${rect.left}px;top:${rect.top}px;
+    width:${rect.width}px;height:${rect.height}px;
+    background:${color};
+    transform:scale(1);opacity:0;
+    border-radius:14px;
+  `;
+
+  // Force reflow then animate
+  void seep.offsetWidth;
+  seep.classList.add('seep-active');
+
+  // After animation completes, hide cleanly
+  _seepTimer=setTimeout(()=>{
+    seep.classList.remove('seep-active');
+    seep.style.cssText='width:0;height:0;left:-9999px;top:-9999px;opacity:0;';
+    _seepTimer=null;
+  },580);
+}
+
+function triggerSeepCollapse(color, onComplete){
+  const seep=$('card-seep');
+  if(!seep){ if(onComplete)onComplete(); return; }
+
+  if(_seepTimer){ clearTimeout(_seepTimer); _seepTimer=null; }
+  seep.classList.remove('seep-active','seep-return');
+
+  // Start from center of screen at large scale, collapse
+  const cx=window.innerWidth/2, cy=window.innerHeight/2;
+  const sz=80;
+  seep.style.cssText=`
+    left:${cx-sz/2}px;top:${cy-sz/2}px;
+    width:${sz}px;height:${sz}px;
+    background:${color};
+    transform:scale(40);opacity:0;
+    border-radius:50%;
+  `;
+
+  void seep.offsetWidth;
+  seep.classList.add('seep-return');
+
+  _seepTimer=setTimeout(()=>{
+    seep.classList.remove('seep-return');
+    seep.style.cssText='width:0;height:0;left:-9999px;top:-9999px;opacity:0;';
+    _seepTimer=null;
+    if(onComplete)onComplete();
+  },520);
+}
+let _screenTransitioning=false;
+(function(){
+  const _orig=setScreen;
+  setScreen=function(id){
+    if(_screenTransitioning){ _orig(id); return; }
+    _screenTransitioning=true;
+    const cur=document.querySelector('.screen.active');
+    if(cur&&cur.id!==id){
+      cur.classList.add('screen-exit');
+      setTimeout(()=>{
+        cur.classList.remove('screen-exit');
+        _orig(id);
+        const next=document.getElementById(id);
+        if(next){ next.classList.add('screen-enter'); setTimeout(()=>next.classList.remove('screen-enter'),450); }
+        _screenTransitioning=false;
+      },180);
+    } else {
+      _orig(id);
+      const next=document.getElementById(id);
+      if(next){ next.classList.add('screen-enter'); setTimeout(()=>next.classList.remove('screen-enter'),450); }
+      _screenTransitioning=false;
+    }
+  };
+})();
+
+
+// ── PANEL WAVE (canvas reacts when panel opens) ──
+let panelWaveActive=false;
+let panelWaveTime=0;
+let panelWaveSide='left';
+function triggerPanelWave(side){
+  panelWaveActive=true;
+  panelWaveTime=0;
+  panelWaveSide=side;
+}
+
+// ── HOOK INTO LAND CARDS — seep on workspace buttons only ──
+function hookCardAnimations(){
+  // Only hook the workspace nav buttons, not the whole card
+  // (card clicks flow through to button clicks anyway)
+}
+
+const CARD_ACCENT_MAP={
+  'land-design-btn':'#e8520a','land-think-btn':'#7aadff','land-forge-btn':'#fb923c',
+  'land-flow-btn':'#e879f9','land-script-btn':'#63b3ed','land-pulse-btn':'#34d399',
+  'land-lens-btn':'#fbbf24','land-launch-btn':'#fb7185','land-mind-btn':'#6ee7b7',
+  'land-connect-btn':'#93c5fd',
+};
+function getAccentForCard(id){ return CARD_ACCENT_MAP[id]||'#e8520a'; }
+
+// ── HOOK showLanding to trigger collapse seep + reset accent ──
+(function(){
+  const _orig=showLanding;
+  showLanding=function(){
+    // Always reset accent to default before landing so nothing bleeds through
+    setAccent('#e8520a');
+    window._lastSeepColor='#e8520a';
+    // Only do the seep collapse if we're coming FROM a workspace (not already on landing)
+    const active=document.querySelector('.screen.active');
+    const onWorkspace=active&&active.id!=='landing-screen'&&active.id!=='setup-screen';
+    if(onWorkspace){
+      _orig();
+    } else {
+      _orig();
+    }
+  };
+})();
+
+// ── PATCH openProj for seep + remember color ──
+(function(){
+  const _orig=openProj;
+  openProj=function(p){
+    window._lastSeepColor=p.color||'#e8520a';
+    _orig(p);
+  };
+})();
+
+// ── HOOK workspace/model buttons to seep ──
+function hookWorkspaceSeeps(){
+  Object.entries(CARD_ACCENT_MAP).forEach(([btnId,color])=>{
+    const card=document.getElementById(btnId);
+    if(!card) return;
+    card.addEventListener('click', function(){
+      window._lastSeepColor=color;
+      // Only set current accent temporarily for the seep animation
+      // Landing page will reset to #e8520a on any return
+      triggerCardSeep(card, color);
+    }, {capture:true});
+  });
+}
+
+// ── HOOK theme toggle to ripple ──
+function hookThemeRipple(){
+  document.querySelectorAll('[id$="theme-btn"],[id$="theme-btn2"]').forEach(btn=>{
+    btn.addEventListener('click', function(e){
+      const rect=btn.getBoundingClientRect();
+      const x=rect.left+rect.width/2, y=rect.top+rect.height/2;
+      setTimeout(()=>triggerThemeRipple(x,y,document.body.classList.contains('light')),0);
+      // Also add canvas ripple
+      addCanvasRipple(x,y, document.body.classList.contains('light')?'220,220,220':'30,30,30');
+    });
+  });
+}
+
+// ── HOOK panel tabs to trigger wave ──
+function hookPanelWaves(){
+  ['notes-tab','todo-tab','journal-tab'].forEach(id=>{
+    const el=$(id);
+    if(el) el.addEventListener('click',()=>{
+      const side=document.body.classList.contains('panels-right')?'right':'left';
+      triggerPanelWave(side);
+      addCanvasRipple(
+        side==='left'?0:window.innerWidth,
+        window.innerHeight/2,
+        window._currentAccentRGB||'180,180,180'
+      );
+    });
+  });
+}
+
+// ── CANVAS RIPPLE INTEGRATION ──
+// This is called from the draw loop — inject into existing canvas IIFE
+// We expose a global hook for the draw loop to process ripples
+window._getCanvasRipples=()=>canvasRipples;
+window._getPanelWave=()=>({active:panelWaveActive,time:panelWaveTime,side:panelWaveSide});
+window._tickPanelWave=()=>{ if(panelWaveActive){ panelWaveTime++; if(panelWaveTime>80)panelWaveActive=false; }};
+window._tickRipples=()=>{
+  canvasRipples=canvasRipples.filter(r=>{
+    r.r+=r.maxR/60;
+    r.alpha=Math.max(0,r.alpha*(1-r.r/r.maxR)*1.05);
+    return r.alpha>0.005&&r.r<r.maxR;
+  });
+};
+
+// Init all animation hooks after DOM ready
+setTimeout(()=>{
+  hookCardAnimations();
+  hookWorkspaceSeeps();
+  hookThemeRipple();
+  hookPanelWaves();
+},200);
 
 // ── PANEL COLOR DOTS ──
 function wirePanelColorDots(){
