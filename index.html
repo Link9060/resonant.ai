@@ -19,9 +19,6 @@
   --text:#111111; --text2:#444444; --text3:#888888;
 }
 /* Light mode background pattern */
-.light #landing-screen::before {
-  background-image:radial-gradient(circle, rgba(0,0,0,0.06) 1px, transparent 1px) !important;
-}
 .light .mb { background: var(--bg2); border-color: var(--border2); }
 .light .msg.user .mb { background: var(--bg3); }
 .light .mb table { border-color: var(--border2); }
@@ -267,14 +264,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 #landing-screen{
   align-items:flex-start;justify-content:center;background:transparent;
 }
-/* dot grid pattern */
-#landing-screen::before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
-  background-size:32px 32px;
-  -webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
-  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
-}
+/* dot grid pattern removed — canvas handles dots */
 /* single deep-space depth glow — neutral cool white/indigo, not red/blue */
 #landing-screen::after{
   content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
@@ -447,11 +437,11 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 
 
 .todo-tab-text{font-size:10px;color:var(--text2);font-weight:600;letter-spacing:.8px;text-transform:uppercase;transform:rotate(180deg);}
-.todo-panel{position:fixed;left:-320px;top:0;bottom:0;width:320px;background:var(--bg2);border-right:1px solid var(--border2);z-index:499;transition:left .25s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:8px 0 32px rgba(0,0,0,.3);}
+.todo-panel{position:fixed;left:-320px;top:0;bottom:0;width:300px;background:var(--bg);border-right:1px solid var(--border2);z-index:499;transition:left .28s cubic-bezier(.4,0,.2,1),right .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:12px 0 40px rgba(0,0,0,.35);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
 .todo-panel.open{left:0;}.todo-tab:hover,.notes-tab:hover,.journal-tab:hover{opacity:1!important;background:var(--bg3);}
 .todo-tab-text{font-size:10px;color:var(--text2);font-weight:600;letter-spacing:.8px;text-transform:uppercase;transform:rotate(180deg);}
-.todo-header{padding:14px 14px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.todo-title{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;}
+.todo-header{padding:18px 16px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--bg2);}
+.todo-title{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;letter-spacing:-.3px;}
 .todo-close{background:none;border:none;color:var(--text2);cursor:pointer;font-size:16px;padding:2px 6px;}
 .todo-add{display:flex;gap:6px;padding:10px 12px;border-bottom:1px solid var(--border);flex-shrink:0;}
 .todo-add-input{flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-size:12px;font-family:inherit;outline:none;}
@@ -479,6 +469,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .land-card.lens::after{background:radial-gradient(ellipse 80% 60% at 50% 120%, rgba(251,191,36,0.15) 0%, transparent 70%);animation-delay:3.2s;}
 /* card number badge */
 .lc-num{position:absolute;top:14px;right:16px;font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;letter-spacing:1px;}
+.lc-key{display:inline-block;background:var(--bg4);border:1px solid var(--border2);border-radius:3px;font-size:8px;padding:0 3px;line-height:1.4;font-family:'JetBrains Mono',monospace;opacity:.6;margin-left:4px;vertical-align:middle;}
 /* subtle scanline on cards */
 .land-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;transition:opacity .3s;}
 
@@ -541,8 +532,21 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 /* ── INTERACTIVE PARTICLE BACKGROUND ── */
 #bg-canvas{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:1;}
 
-.land-dock{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:100;display:flex;align-items:center;gap:3px;background:rgba(14,14,14,0.92);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:5px;backdrop-filter:blur(20px);box-shadow:0 8px 32px rgba(0,0,0,.6);}
+/* ── COLLAPSIBLE DOCK ── */
+.land-dock{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:100;display:flex;align-items:center;gap:0;background:rgba(14,14,14,0.92);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:5px;backdrop-filter:blur(20px);box-shadow:0 8px 32px rgba(0,0,0,.6);transition:all .3s cubic-bezier(.4,0,.2,1);}
 body:not(:has(#landing-screen.active)) .land-dock{display:none!important;}
+.dock-collapse-btn{height:34px;width:30px;padding:0;border-radius:9px;background:transparent;border:none;color:var(--text3);cursor:pointer;font-size:16px;font-weight:300;font-family:inherit;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.dock-collapse-btn:hover{background:var(--bg3);color:var(--text);}
+.dock-dock-inner{display:flex;align-items:center;gap:3px;overflow:hidden;transition:max-width .35s cubic-bezier(.4,0,.2,1), opacity .25s;max-width:800px;opacity:1;}
+.land-dock.collapsed .dock-dock-inner{max-width:0;opacity:0;pointer-events:none;}
+.land-dock.collapsed{border-radius:50%;width:44px;height:44px;padding:0;justify-content:center;bottom:20px;}
+.land-dock.collapsed .dock-collapse-btn{transform:scaleX(-1);}
+
+/* ── MIND MAP ── */
+#layout-canvas{touch-action:none;}
+.land-cards,.land-wrap h1,.land-sub,.land-wave,.land-logo{transition:opacity .4s, transform .4s;}
+.mindmap-active .land-cards,.mindmap-active .land-wrap>*{opacity:0;pointer-events:none;}
+.mindmap-active #layout-canvas{display:block!important;}
 .dock-btn{height:34px;padding:0 14px;border-radius:9px;background:transparent;border:none;color:var(--text2);cursor:pointer;font-size:12px;font-weight:500;font-family:inherit;transition:all .16s;display:flex;align-items:center;gap:6px;white-space:nowrap;}
 .dock-btn:hover{background:var(--bg3);color:var(--text);}
 .dock-btn.primary{background:var(--accent);color:#fff;}
@@ -554,7 +558,7 @@ body:not(:has(#landing-screen.active)) .land-dock{display:none!important;}
 
 /* ── WORKSPACE SCREEN ── */
 #workspace-screen{align-items:flex-start;justify-content:center;background:transparent;}
-#workspace-screen::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(circle,rgba(255,255,255,0.04) 1px,transparent 1px);background-size:28px 28px;-webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 40%,black 20%,transparent 100%);mask-image:radial-gradient(ellipse 80% 80% at 50% 40%,black 20%,transparent 100%);}
+/* workspace dot grid removed */
 .ws-topbar{height:52px;background:var(--bg2);border-bottom:1px solid var(--border2);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;position:sticky;top:0;z-index:10;}
 .ws-logo{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;letter-spacing:-.3px;}
 .ws-logo i{color:var(--accent);font-style:normal;}
@@ -594,7 +598,7 @@ body:not(:has(#landing-screen.active)) .land-dock{display:none!important;}
 
 /* ── HUB SCREEN ── */
 #hub-screen{align-items:flex-start;justify-content:center;background:transparent;}
-#hub-screen::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(circle,rgba(255,255,255,0.035) 1px,transparent 1px);background-size:32px 32px;-webkit-mask-image:radial-gradient(ellipse 90% 80% at 50% 40%,black 20%,transparent 100%);mask-image:radial-gradient(ellipse 90% 80% at 50% 40%,black 20%,transparent 100%);}
+/* hub dot grid removed */
 
 .hub-header{margin-bottom:32px;}
 .hub-header h1{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.4px;margin-bottom:4px;}
@@ -647,17 +651,24 @@ body:not(:has(#landing-screen.active)) .land-dock{display:none!important;}
 
 /* ── NOTES WIDGET ── */
 
-
-.notes-tab-text{font-size:10px;color:var(--text2);font-weight:600;letter-spacing:.8px;text-transform:uppercase;}
-.notes-panel{position:fixed;left:-340px;top:0;bottom:0;width:340px;background:var(--bg2);border-right:1px solid var(--border2);z-index:499;transition:left .25s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:8px 0 32px rgba(0,0,0,.3);}
+/* Panel open/close directional animation */
+@keyframes panelFromLeft{0%{transform:translateX(-28px);opacity:0;}100%{transform:translateX(0);opacity:1;}}
+@keyframes panelFromRight{0%{transform:translateX(28px);opacity:0;}100%{transform:translateX(0);opacity:1;}}
+@keyframes panelToLeft{0%{transform:translateX(0);opacity:1;}100%{transform:translateX(-28px);opacity:0;}}
+@keyframes panelToRight{0%{transform:translateX(0);opacity:1;}100%{transform:translateX(28px);opacity:0;}}
+.panel-anim-from-left{animation:panelFromLeft .28s cubic-bezier(.4,0,.2,1) both;}
+.panel-anim-from-right{animation:panelFromRight .28s cubic-bezier(.4,0,.2,1) both;}
+.panel-anim-to-left{animation:panelToLeft .22s cubic-bezier(.4,0,.8,0) both;}
+.panel-anim-to-right{animation:panelToRight .22s cubic-bezier(.4,0,.8,0) both;}.notes-tab-text{font-size:10px;color:var(--text2);font-weight:600;letter-spacing:.8px;text-transform:uppercase;}
+.notes-panel{position:fixed;left:-340px;top:0;bottom:0;width:320px;background:var(--bg);border-right:1px solid var(--border2);z-index:499;transition:left .28s cubic-bezier(.4,0,.2,1),right .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:12px 0 40px rgba(0,0,0,.35);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
 .notes-panel.open{left:0;}
-.notes-header{padding:12px 14px 8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0;}
-.notes-title{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;flex:1;}
+.notes-header{padding:18px 16px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0;background:var(--bg2);}
+.notes-title{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;letter-spacing:-.3px;flex:1;}
 .notes-close{background:none;border:none;color:var(--text2);cursor:pointer;font-size:16px;padding:2px 6px;}
 .notes-folders{display:flex;gap:4px;padding:8px 10px;border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0;}
 .notes-folder{padding:3px 10px;border-radius:20px;font-size:11px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);cursor:pointer;white-space:nowrap;transition:all .14s;}
-.notes-folder:hover{border-color:var(--accent4);color:var(--accent4);}
-.notes-folder.active{background:rgba(183,138,255,.12);border-color:rgba(183,138,255,.4);color:var(--accent4);}
+.notes-folder:hover{border-color:var(--border2);color:var(--text);}
+.notes-folder.active{background:var(--bg4);border-color:var(--border2);color:var(--text);}
 .notes-folder.add-folder{background:none;border-style:dashed;}
 .notes-list{width:140px;border-right:1px solid var(--border);overflow-y:auto;flex-shrink:0;}
 .notes-list-item{padding:9px 10px;cursor:pointer;transition:all .14s;border-left:2px solid transparent;font-size:12px;}
@@ -853,6 +864,28 @@ body{transition:background .4s ease,color .3s ease;}
 #landing-screen.active .land-card{
   animation:cardDrop .42s cubic-bezier(.4,0,.2,1) both;
 }
+/* ── IMAGE UPLOAD ── */
+.img-attach-btn{width:34px;height:34px;border-radius:var(--rs,8px);background:var(--bg3);border:1px solid var(--border2);color:var(--text2);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .16s;}
+.img-attach-btn:hover{border-color:var(--accent);color:var(--accent);}
+.img-attach-btn input{display:none;}
+.ws-img-attach{width:32px;height:32px;border-radius:8px;background:var(--bg4,var(--bg3));border:1px solid var(--border2);color:var(--text2);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .16s;}
+.ws-img-attach:hover{border-color:var(--accent);color:var(--accent);}
+.ws-img-attach input{display:none;}
+.img-preview-strip{display:flex;gap:8px;flex-wrap:wrap;}
+.img-preview-item{position:relative;width:60px;height:60px;border-radius:8px;overflow:hidden;border:1px solid var(--border2);flex-shrink:0;background:var(--bg3);animation:imgPop .2s cubic-bezier(.4,0,.2,1);}
+@keyframes imgPop{0%{transform:scale(.7);opacity:0;}100%{transform:scale(1);opacity:1;}}
+.img-preview-item img{width:100%;height:100%;object-fit:cover;cursor:zoom-in;}
+.img-preview-remove{position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:rgba(0,0,0,.78);border:none;color:#fff;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;}
+.img-preview-remove:hover{background:rgba(220,50,50,.9);}
+.msg-image{max-width:260px;max-height:180px;border-radius:8px;display:block;margin-bottom:6px;border:1px solid var(--border2);cursor:zoom-in;transition:transform .18s;}
+.msg-image:hover{transform:scale(1.02);}
+#img-lightbox{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.9);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+#img-lightbox.open{display:flex;}
+#img-lightbox img{max-width:90vw;max-height:88vh;border-radius:10px;}
+/* Drag drop overlay */
+.drag-over-overlay{position:absolute;inset:0;border-radius:inherit;border:2px dashed var(--accent);background:var(--accent-dim,rgba(232,82,10,.08));z-index:10;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity .15s;}
+.drag-active .drag-over-overlay{opacity:1;}
+
 .bug-report-btn{
   margin-left:auto;padding:5px 12px;border-radius:6px;
   background:transparent;border:1px solid var(--border2);
@@ -935,7 +968,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
 .panels-right .todo-tab { margin-right: 0; }
 
 /* ── PANEL ACCENT COLORS ── */
-:root{--notes-accent:#b78aff;--tasks-accent:#34d399;--journal-accent:#7aadff;}
+:root{--notes-accent:var(--border2);--tasks-accent:var(--border2);--journal-accent:var(--border2);}
 
 /* Tab base styles — evenly spaced using calc, never clusters */
 .notes-tab,.journal-tab,.todo-tab{
@@ -954,9 +987,9 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
   Tab 2 center: -90 + 90 = 0px from 50vh  (80px tab + 10px gap)
   Tab 3 center: 0 + 90 = +90px from 50vh
 */
-.notes-tab  { border-color:var(--notes-accent);   margin-top:-130px; }
-.journal-tab{ border-color:var(--journal-accent);  margin-top: -40px; }
-.todo-tab   { border-color:var(--tasks-accent);    margin-top:  50px; }
+.notes-tab  { border-color:var(--border2); margin-top:-130px; }
+.journal-tab{ border-color:var(--border2); margin-top: -40px; }
+.todo-tab   { border-color:var(--border2); margin-top:  50px; }
 .notes-tab:hover,.journal-tab:hover,.todo-tab:hover{opacity:1;width:30px;background:var(--bg3);}
 
 /* RIGHT side */
@@ -1045,7 +1078,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
   <div class="land-scroll">
     <div class="land-wrap">
       <div style="text-align:center;">
-        <div class="land-logo">Resonant<i>.</i>AI<span class="beta-badge">beta</span></div>
+        <div class="land-logo">Resonant<i>.</i>AI<span class="beta-badge">beta 1.1</span></div>
         <svg class="land-wave" viewBox="0 0 80 16" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M0 8 C10 8, 10 2, 20 2 S30 14, 40 14 S50 2, 60 2 S70 8, 80 8" stroke="rgba(255,255,255,0.18)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
         </svg>
@@ -1053,7 +1086,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
       </div>
       <div class="land-cards">
         <div class="land-card build" id="land-design-btn">
-          <div class="lc-num">01</div>
+          <div class="lc-num">01 <span class="lc-key">1</span></div>
           <div class="lc-icon">🔧</div>
           <div class="lc-name">Resonant. Build</div>
           <div class="lc-tag">Hardware engineering, mechanical logic & physical prototyping</div>
@@ -1067,7 +1100,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
           <div class="lc-slash"></div><div class="lc-arrow">→</div>
         </div>
         <div class="land-card learn" id="land-think-btn">
-          <div class="lc-num">02</div>
+          <div class="lc-num">02 <span class="lc-key">2</span></div>
           <div class="lc-icon">🎓</div>
           <div class="lc-name">Resonant. Learn</div>
           <div class="lc-tag">Accelerated learning, exam prep & high-intensity focus sessions</div>
@@ -1080,7 +1113,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
           <div class="lc-slash"></div><div class="lc-arrow">→</div>
         </div>
         <div class="land-card forge" id="land-forge-btn">
-          <div class="lc-num">03</div>
+          <div class="lc-num">03 <span class="lc-key">3</span></div>
           <div class="lc-icon">🔩</div>
           <div class="lc-name">Resonant. Forge</div>
           <div class="lc-tag">Software engineering & prototyping — bridge design to functional product</div>
@@ -1093,7 +1126,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
           <div class="lc-slash"></div><div class="lc-arrow">→</div>
         </div>
         <div class="land-card script" id="land-script-btn">
-          <div class="lc-num">04</div>
+          <div class="lc-num">04 <span class="lc-key">4</span></div>
           <div class="lc-icon">📐</div>
           <div class="lc-name">Resonant. Script</div>
           <div class="lc-tag">Generative geometry, API scripting & parametric modeling</div>
@@ -1106,7 +1139,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
           <div class="lc-slash"></div><div class="lc-arrow">→</div>
         </div>
         <div class="land-card create" id="land-flow-btn">
-          <div class="lc-num">05</div>
+          <div class="lc-num">05 <span class="lc-key">5</span></div>
           <div class="lc-icon">✍️</div>
           <div class="lc-name">Resonant. Create</div>
           <div class="lc-tag">Turning ideas into media — essays, social content, scripts & branding</div>
@@ -1120,7 +1153,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
           <div class="lc-slash"></div><div class="lc-arrow">→</div>
         </div>
         <div class="land-card pulse" id="land-pulse-btn">
-          <div class="lc-num">06</div>
+          <div class="lc-num">06 <span class="lc-key">6</span></div>
           <div class="lc-icon">💪</div>
           <div class="lc-name">Resonant. Pulse</div>
           <div class="lc-tag">Performance & biometrics — training, nutrition, recovery & sport science</div>
@@ -1134,7 +1167,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
           <div class="lc-slash"></div><div class="lc-arrow">→</div>
         </div>
         <div class="land-card lens" id="land-lens-btn">
-          <div class="lc-num">07</div>
+          <div class="lc-num">07 <span class="lc-key">7</span></div>
           <div class="lc-icon">🔭</div>
           <div class="lc-name">Resonant. Lens</div>
           <div class="lc-tag">Market intelligence & vision — trends, competitors & scaling ideas</div>
@@ -1148,7 +1181,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
         </div>
         <!-- 08 LAUNCH -->
         <div class="land-card launch" id="land-launch-btn">
-          <div class="lc-num">08</div>
+          <div class="lc-num">08 <span class="lc-key">8</span></div>
           <div class="lc-icon">🚀</div>
           <div class="lc-name">Resonant. Launch</div>
           <div class="lc-tag">Career tools — resumes, cold outreach, interview prep & offer negotiation</div>
@@ -1162,7 +1195,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
         </div>
         <!-- 09 MIND -->
         <div class="land-card mind" id="land-mind-btn">
-          <div class="lc-num">09</div>
+          <div class="lc-num">09 <span class="lc-key">9</span></div>
           <div class="lc-icon">🧘</div>
           <div class="lc-name">Resonant. Mind</div>
           <div class="lc-tag">Mental wellness — CBT tools, burnout check, venting & anxiety prep</div>
@@ -1176,7 +1209,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
         </div>
         <!-- 10 CONNECT -->
         <div class="land-card connect" id="land-connect-btn">
-          <div class="lc-num">10</div>
+          <div class="lc-num">10 <span class="lc-key">0</span></div>
           <div class="lc-icon">💬</div>
           <div class="lc-name">Resonant. Connect</div>
           <div class="lc-tag">Social intelligence — decode messages, resolve conflict & communicate better</div>
@@ -1247,7 +1280,9 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
         <button class="speak-btn" id="ws-tts-stop" title="Stop">⏹</button>
       </div>
       <div class="think-input-wrap">
+        <div id="script-img-preview" class="img-preview-strip" style="display:none;padding:4px 0;"></div>
         <div class="think-ir">
+          <label class="ws-img-attach" title="Attach image" data-ws="script">🖼️<input type="file" class="ws-img-input" data-ws="script" accept="image/*" multiple></label>
           <textarea class="think-textarea" id="script-input" placeholder="Describe a part, paste code, or ask for a calculation…" rows="1" style="border-color:rgba(99,179,237,.3);font-family:'JetBrains Mono',monospace;font-size:12px;"></textarea>
           <button class="think-send" id="script-send" style="background:#63b3ed;color:#0a1a2a;">↑</button>
         </div>
@@ -1312,7 +1347,9 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
         <button class="speak-btn" id="ws-tts-stop" title="Stop">⏹</button>
       </div>
       <div class="think-input-wrap">
+        <div id="forge-img-preview" class="img-preview-strip" style="display:none;padding:4px 0;"></div>
         <div class="think-ir">
+          <label class="ws-img-attach" title="Attach image" data-ws="forge">🖼️<input type="file" class="ws-img-input" data-ws="forge" accept="image/*" multiple></label>
           <textarea class="think-textarea" id="forge-input" placeholder="Paste code, describe a bug, or ask anything…" rows="1" style="border-color:rgba(251,146,60,.3);"></textarea>
           <button class="think-send" id="forge-send" style="background:#fb923c;color:#1a0a00;">↑</button>
         </div>
@@ -1376,7 +1413,9 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
         <button class="speak-btn" id="ws-tts-stop" title="Stop">⏹</button>
       </div>
       <div class="think-input-wrap">
+        <div id="flow-img-preview" class="img-preview-strip" style="display:none;padding:4px 0;"></div>
         <div class="think-ir">
+          <label class="ws-img-attach" title="Attach image" data-ws="flow">🖼️<input type="file" class="ws-img-input" data-ws="flow" accept="image/*" multiple></label>
           <textarea class="think-textarea" id="flow-input" placeholder="Describe a creative challenge…" rows="1" style="border-color:rgba(232,121,249,.3);"></textarea>
           <button class="think-send" id="flow-send" style="background:#e879f9;color:#1a001f;">↑</button>
         </div>
@@ -1440,7 +1479,9 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
         <button class="speak-btn" id="ws-tts-stop" title="Stop">⏹</button>
       </div>
       <div class="think-input-wrap">
+        <div id="pulse-img-preview" class="img-preview-strip" style="display:none;padding:4px 0;"></div>
         <div class="think-ir">
+          <label class="ws-img-attach" title="Attach image" data-ws="pulse">🖼️<input type="file" class="ws-img-input" data-ws="pulse" accept="image/*" multiple></label>
           <textarea class="think-textarea" id="pulse-input" placeholder="Log a session, ask about training, nutrition, recovery…" rows="1" style="border-color:rgba(52,211,153,.3);"></textarea>
           <button class="think-send" id="pulse-send" style="background:#34d399;color:#00150a;">↑</button>
         </div>
@@ -1503,7 +1544,9 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
         <button class="speak-btn" id="ws-tts-stop" title="Stop">⏹</button>
       </div>
       <div class="think-input-wrap">
+        <div id="lens-img-preview" class="img-preview-strip" style="display:none;padding:4px 0;"></div>
         <div class="think-ir">
+          <label class="ws-img-attach" title="Attach image" data-ws="lens">🖼️<input type="file" class="ws-img-input" data-ws="lens" accept="image/*" multiple></label>
           <textarea class="think-textarea" id="lens-input" placeholder="Ask about markets, competitors, business strategy…" rows="1" style="border-color:rgba(251,191,36,.3);"></textarea>
           <button class="think-send" id="lens-send" style="background:#fbbf24;color:#1a1000;">↑</button>
         </div>
@@ -1513,33 +1556,41 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
 </div>
 
   <!-- Landing dock -->
-  <div class="land-dock">
-    <button class="dock-btn" id="land-theme-btn" title="Toggle theme">☀</button>
-    <div class="dock-sep"></div>
-    <button class="dock-btn" id="land-panels-btn" title="Toggle panels side">⇄ Panels</button>
-    <div class="dock-sep"></div>
-    <button class="dock-btn" id="land-key-btn" title="API Key">⚙ API Key</button>
-    <div class="dock-sep"></div>
-    <button class="dock-btn" id="land-help-btn">
-      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M7 9.5V7.5c0-.55.45-1 1-1 .55 0 1-.45 1-1S8.55 4.5 8 4.5H6.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="7" cy="10.5" r=".6" fill="currentColor"/></svg>
-      Guide
-    </button>
-    <div class="dock-sep"></div>
-    <a class="dock-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdG0PoDjDYJDFTqRS3nTeHYEvItKmdaXYGcyAKRsVj7p3EnsA/viewform?usp=dialog" target="_blank" style="text-decoration:none;">
-      🐛 Bug Report
-    </a>
-    <div class="dock-sep"></div>
-    <button class="dock-btn blue" id="land-hub-btn">
-      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.3"/><rect x="8" y="1" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="8" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.3"/><rect x="8" y="8" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.3"/></svg>
-      Hub
-    </button>
-    <div class="dock-sep"></div>
-    <button class="dock-btn primary" id="land-ws-btn">
-      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 5.5V13H9V9H5V13H1V5.5L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
-      My Workspace
-    </button>
+  <!-- Landing dock - collapsible, hotkey = -->
+  <div class="land-dock" id="land-dock">
+    <button class="dock-btn dock-collapse-btn" id="dock-collapse-btn" title="Collapse dock (=)">‹</button>
+    <div class="dock-dock-inner" id="dock-inner">
+      <div class="dock-sep"></div>
+      <button class="dock-btn" id="land-theme-btn" title="Toggle theme">☀</button>
+      <div class="dock-sep"></div>
+      <button class="dock-btn" id="land-panels-btn" title="Toggle panels side">⇄ Panels</button>
+      <div class="dock-sep"></div>
+      <button class="dock-btn" id="land-key-btn" title="API Key">⚙ API Key</button>
+      <div class="dock-sep"></div>
+      <button class="dock-btn" id="land-help-btn">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M7 9.5V7.5c0-.55.45-1 1-1 .55 0 1-.45 1-1S8.55 4.5 8 4.5H6.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="7" cy="10.5" r=".6" fill="currentColor"/></svg>
+        Guide
+      </button>
+      <div class="dock-sep"></div>
+      <a class="dock-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdG0PoDjDYJDFTqRS3nTeHYEvItKmdaXYGcyAKRsVj7p3EnsA/viewform?usp=dialog" target="_blank" style="text-decoration:none;">🐛 Bug</a>
+      <div class="dock-sep"></div>
+      <button class="dock-btn" id="land-layout-btn" title="Toggle mind map layout">⊹ Layout</button>
+      <div class="dock-sep"></div>
+      <button class="dock-btn blue" id="land-hub-btn">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.3"/><rect x="8" y="1" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="8" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.3"/><rect x="8" y="8" width="5" height="5" rx="1.2" stroke="currentColor" stroke-width="1.3"/></svg>
+        Hub
+      </button>
+      <div class="dock-sep"></div>
+      <button class="dock-btn primary" id="land-ws-btn">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 5.5V13H9V9H5V13H1V5.5L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+        Workspace
+      </button>
+    </div>
   </div>
 </div>
+
+<!-- ── MIND MAP CANVAS (landing page alternate layout) ── -->
+<canvas id="layout-canvas" style="display:none;position:fixed;inset:0;z-index:2;cursor:default;"></canvas>
 
 <!-- ── WORKSPACE SCREEN ── -->
 <div id="workspace-screen" class="screen">
@@ -1673,7 +1724,9 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
         <button class="speak-btn" id="ws-tts-stop" title="Stop">⏹</button>
       </div>
       <div class="think-input-wrap">
+        <div id="launch-img-preview" class="img-preview-strip" style="display:none;padding:4px 0;"></div>
         <div class="think-ir">
+          <label class="ws-img-attach" title="Attach image" data-ws="launch">🖼️<input type="file" class="ws-img-input" data-ws="launch" accept="image/*" multiple></label>
           <textarea class="think-textarea" id="launch-input" placeholder="Paste a job description, your resume, or describe your situation…" rows="1" style="border-color:rgba(251,113,133,.3);"></textarea>
           <button class="think-send" id="launch-send" style="background:#fb7185;color:#1a0008;">↑</button>
         </div>
@@ -1736,7 +1789,9 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
         <button class="speak-btn" id="ws-tts-stop" title="Stop">⏹</button>
       </div>
       <div class="think-input-wrap">
+        <div id="mind-img-preview" class="img-preview-strip" style="display:none;padding:4px 0;"></div>
         <div class="think-ir">
+          <label class="ws-img-attach" title="Attach image" data-ws="mind">🖼️<input type="file" class="ws-img-input" data-ws="mind" accept="image/*" multiple></label>
           <textarea class="think-textarea" id="mind-input" placeholder="What's going on? This is a judgment-free space…" rows="1" style="border-color:rgba(110,231,183,.3);"></textarea>
           <button class="think-send" id="mind-send" style="background:#6ee7b7;color:#00150a;">↑</button>
         </div>
@@ -1799,7 +1854,9 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
         <button class="speak-btn" id="ws-tts-stop" title="Stop">⏹</button>
       </div>
       <div class="think-input-wrap">
+        <div id="connect-img-preview" class="img-preview-strip" style="display:none;padding:4px 0;"></div>
         <div class="think-ir">
+          <label class="ws-img-attach" title="Attach image" data-ws="connect">🖼️<input type="file" class="ws-img-input" data-ws="connect" accept="image/*" multiple></label>
           <textarea class="think-textarea" id="connect-input" placeholder="Paste a message, describe a situation, or ask for help communicating…" rows="1" style="border-color:rgba(147,197,253,.3);"></textarea>
           <button class="think-send" id="connect-send" style="background:#93c5fd;color:#001830;">↑</button>
         </div>
@@ -1826,7 +1883,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
       <div class="help-tip"><strong>1. Choose a workspace from the home screen.</strong> Each workspace is a specialized AI tuned for a specific type of task — learning, coding, writing, fitness, business, and more. Pick the one that matches what you're trying to do.</div>
       <div class="help-tip"><strong>2. Pick a mode from the sidebar.</strong> Within each workspace, modes change how the AI formats and approaches its response. For example in Resonant. Learn: "Lock In" gives fast direct answers, "Feynman" teaches by explanation, "Flashcard Gen" creates study cards.</div>
       <div class="help-tip"><strong>3. Type your question and hit ↑ or Enter.</strong> The AI will respond with a typewriter effect — it streams in naturally. Each response has a 🔊 Speak button to read it aloud.</div>
-      <div class="help-tip"><strong>4. Use the shortcut chips</strong> above the input to add quick instructions like "bullet points only" or "summarize in 3 sentences" — these append to your message before sending.</div>
+      <div class="help-tip"><strong>4. Use the shortcut chips</strong> above the input to add quick instructions like "bullet points only" or "summarise in 3 sentences" — these append to your message before sending.</div>
     </div>
 
     <!-- PANELS -->
@@ -1862,14 +1919,47 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
     <!-- SHORTCUTS -->
     <div class="help-section">
       <div class="help-section-title">Keyboard Shortcuts</div>
-      <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:13px;color:var(--text2);align-items:center;">
-        <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:12px;white-space:nowrap;">Enter</kbd><span>Send message (Shift+Enter for new line)</span>
-        <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:12px;">` (backtick)</kbd><span>Exit any text box — returns focus to page so panel shortcuts work</span>
-        <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:12px;">\ (backslash)</kbd><span>Open / close Notes</span>
-        <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:12px;">' (apostrophe)</kbd><span>Open / close Journal</span>
-        <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:12px;">/ (slash)</kbd><span>Open / close Tasks</span>
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:7px 18px;font-size:13px;color:var(--text2);align-items:center;">
+        <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:11px;white-space:nowrap;">Enter</kbd><span>Send message</span>
+        <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:11px;">Shift+Enter</kbd><span>New line in message</span>
+        <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:11px;">` (backtick) — in input</kbd><span>Exit text box and return focus to page</span>
+        <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:11px;">` (backtick) — not in input</kbd><span>Toggle all panels to opposite side</span>
+        <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:11px;">\ (backslash)</kbd><span>Open / close Notes panel</span>
+        <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:11px;">' (apostrophe)</kbd><span>Open / close Journal panel</span>
+        <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:11px;">/ (slash)</kbd><span>Open / close Tasks panel</span>
+        <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:11px;">= (equals)</kbd><span>Collapse / expand the bottom dock (landing page only)</span>
+        <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:11px;">1 – 9</kbd><span>Open workspace 1–9 directly (landing page only)</span>
+        <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:11px;">0</kbd><span>Open workspace 10 — Resonant. Connect (landing page only)</span>
       </div>
-      <div class="help-tip" style="margin-top:14px;"><strong>Note:</strong> Panel shortcuts (\ ' /) only work when you're not typing in an input field. Press <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:1px 5px;border-radius:3px;font-family:monospace;font-size:11px;">` </kbd> first to exit the input, then use the shortcuts.</div>
+      <div class="help-tip" style="margin-top:12px;"><strong>Note:</strong> Panel shortcuts (\ ' /) and number shortcuts only work when not typing in an input. Press <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:1px 5px;border-radius:3px;font-family:monospace;font-size:11px;">`</kbd> to exit an input first.</div>
+    </div>
+
+    <!-- DOCK & NAVIGATION -->
+    <div class="help-section">
+      <div class="help-section-title">Dock & Navigation</div>
+      <div class="help-tip"><strong>Bottom dock</strong> — visible only on the landing page. Contains: theme toggle ☀/🌙, ⇄ Panels side switch, ⚙ API Key, Guide, Bug Report, ⊹ Layout mode, Hub, and My Workspace.</div>
+      <div class="help-tip"><strong>Collapse dock</strong> — click the ‹ button on the left of the dock, or press <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:1px 5px;border-radius:3px;font-family:monospace;font-size:11px;">=</kbd> to collapse the dock to a small circle. Press again to expand.</div>
+      <div class="help-tip"><strong>⊹ Layout mode</strong> — switches the landing page from card grid to an interactive orbital view. Each workspace is a planet orbiting the Resonant.AI black hole center. Hover a planet for 0.5s to see its description slide in from the right. Click a planet or the Launch button to navigate. Entering/exiting has a morph animation.</div>
+      <div class="help-tip"><strong>Workspace number shortcuts</strong> — on the landing page, press 1–9 and 0 to instantly jump to any workspace. The number is shown in the top-right of each card.</div>
+    </div>
+
+    <!-- PANELS -->
+    <div class="help-section">
+      <div class="help-section-title">Side Panels</div>
+      <div class="help-tip"><strong>Three panels</strong> — Notes (\ key), Journal (' key), Tasks (/ key). Each has its own tab on the side of the screen that you can click to open or close.</div>
+      <div class="help-tip"><strong>Independent sides</strong> — each panel can live on left or right independently. The ⇄ button in the dock moves all three at once. The backtick key (when not in an input) also toggles all panels.</div>
+      <div class="help-tip"><strong>Opening a second panel</strong> — if Notes is open and you open Tasks, the Tasks tab automatically animates to the opposite side so both panels can be open simultaneously.</div>
+      <div class="help-tip"><strong>Closing a crossed panel</strong> — when a panel that was moved to the opposite side closes, its tab animates back to its home side.</div>
+      <div class="help-tip"><strong>📁 Notes folders</strong> — create custom folders with the + Folder button. Hover a custom folder to see ✏️ rename and ✕ delete buttons. Folders persist across sessions.</div>
+      <div class="help-tip"><strong>📔 Journal</strong> — private daily journal with AI chat inside it. A new blank page opens each day. History button shows past entries.</div>
+    </div>
+
+    <!-- IMAGE UPLOADS -->
+    <div class="help-section">
+      <div class="help-section-title">Image Uploads & Vision</div>
+      <div class="help-tip"><strong>🖼️ Attach images</strong> — every workspace and the Build chat has an image attach button next to the input. Click it to select one or more images, or <strong>drag and drop</strong> images directly onto any chat area. Images appear as thumbnails above the input before sending.</div>
+      <div class="help-tip"><strong>Vision AI</strong> — when you send a message with an image, the AI uses a vision model to analyse it. Ask about diagrams, screenshots, sketches, photos — anything visual. Images are not stored between messages.</div>
+      <div class="help-tip"><strong>Lightbox</strong> — click any image thumbnail to view it full-screen. Press Escape or click outside to close.</div>
     </div>
 
     <!-- BUG REPORT -->
@@ -2194,7 +2284,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
         <span class="sc-chip" data-sc="Give me bullet points only">• Bullet points</span>
         <span class="sc-chip" data-sc="Break this down step by step">📶 Step by step</span>
         <span class="sc-chip" data-sc="Explain this like I'm 5 years old">🧒 ELI5</span>
-        <span class="sc-chip" data-sc="Summarize this in 3 key points">📝 Summarize</span>
+        <span class="sc-chip" data-sc="Summarise this in 3 key points">📝 Summarise</span>
         <span class="sc-chip" data-sc="Give me a pros and cons list">⚖️ Pros & Cons</span>
       </div>
       <div class="ws-tts-bar">
@@ -2206,7 +2296,9 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
         <button class="speak-btn" id="ws-tts-stop" title="Stop">⏹</button>
       </div>
       <div class="think-input-wrap">
+        <div id="think-img-preview" class="img-preview-strip" style="display:none;padding:4px 0;"></div>
         <div class="think-ir">
+          <label class="ws-img-attach" title="Attach image" data-ws="think">🖼️<input type="file" class="ws-img-input" data-ws="think" accept="image/*" multiple></label>
           <textarea class="think-textarea" id="think-input" placeholder="Ask anything…" rows="1"></textarea>
           <button class="think-send" id="think-send">↑</button>
         </div>
@@ -2218,25 +2310,12 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
 <!-- ── JOURNAL WIDGET (global) ── -->
 <canvas id="bg-canvas"></canvas>
 
-<div class="journal-tab" id="journal-tab" data-tip="' → Journal">
-  <div class="journal-tab-text">Journal</div>
-  <div class="tab-color-picker" id="tcp-journal">
-    <div class="tcp-label">Journal color</div>
-    <div class="tcp-swatches" id="tcs-journal"></div>
-  </div>
-</div>
+<div class="journal-tab" id="journal-tab" data-tip="' → Journal"><div class="journal-tab-text">Journal</div></div>
 <div class="journal-overlay" id="journal-overlay">
   <div class="journal-panel" id="journal-panel">
     <div class="journal-header">
       <div class="journal-date" id="journal-date"></div>
       <input class="journal-title-input" id="journal-title" placeholder="What's on your mind today…">
-      <div class="panel-color-row">
-        <div class="panel-color-dot" data-panel="journal" data-color="#7aadff" style="background:#7aadff;"></div>
-        <div class="panel-color-dot" data-panel="journal" data-color="#b78aff" style="background:#b78aff;"></div>
-        <div class="panel-color-dot" data-panel="journal" data-color="#7adf7a" style="background:#7adf7a;"></div>
-        <div class="panel-color-dot" data-panel="journal" data-color="#fb7185" style="background:#fb7185;"></div>
-        <div class="panel-color-dot" data-panel="journal" data-color="#fbbf24" style="background:#fbbf24;"></div>
-      </div>
       <div style="position:relative;z-index:100;">
         <button class="journal-history-btn" id="journal-hist-btn">📅 History</button>
         <div class="journal-history" id="journal-history"></div>
@@ -2270,23 +2349,10 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
 </div>
 
 <!-- ── NOTES WIDGET (global) ── -->
-<div class="notes-tab" id="notes-tab" data-tip="\\ → Notes">
-  <div class="notes-tab-text">Notes</div>
-  <div class="tab-color-picker" id="tcp-notes">
-    <div class="tcp-label">Notes color</div>
-    <div class="tcp-swatches" id="tcs-notes"></div>
-  </div>
-</div>
+<div class="notes-tab" id="notes-tab" data-tip="\\ → Notes"><div class="notes-tab-text">Notes</div></div>
 <div class="notes-panel" id="notes-panel">
   <div class="notes-header">
-    <div class="notes-title">📝 Notes <span style="font-size:10px;color:var(--text3);font-weight:400;font-family:'JetBrains Mono',monospace;">' to toggle</span></div>
-    <div class="panel-color-row" id="notes-color-row">
-      <div class="panel-color-dot" data-panel="notes" data-color="#b78aff" style="background:#b78aff;" title="Purple"></div>
-      <div class="panel-color-dot" data-panel="notes" data-color="#7aadff" style="background:#7aadff;" title="Blue"></div>
-      <div class="panel-color-dot" data-panel="notes" data-color="#7adf7a" style="background:#7adf7a;" title="Green"></div>
-      <div class="panel-color-dot" data-panel="notes" data-color="#e8520a" style="background:#e8520a;" title="Orange"></div>
-      <div class="panel-color-dot" data-panel="notes" data-color="#fbbf24" style="background:#fbbf24;" title="Yellow"></div>
-    </div>
+    <div class="notes-title">📝 Notes</div>
     <button class="notes-close" id="notes-close">✕</button>
   </div>
   <div class="notes-folders" id="notes-folders">
@@ -2315,23 +2381,10 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
 </div>
 
 <!-- ── TODO WIDGET (global) ── -->
-<div class="todo-tab" id="todo-tab" data-tip="/ → Tasks">
-  <div class="todo-tab-text">Tasks</div>
-  <div class="tab-color-picker" id="tcp-tasks">
-    <div class="tcp-label">Tasks color</div>
-    <div class="tcp-swatches" id="tcs-tasks"></div>
-  </div>
-</div>
+<div class="todo-tab" id="todo-tab" data-tip="/ → Tasks"><div class="todo-tab-text">Tasks</div></div>
 <div class="todo-panel" id="todo-panel">
   <div class="todo-header">
-    <div class="todo-title">To-Do <span style="font-size:10px;color:var(--text3);font-weight:400;font-family:'JetBrains Mono',monospace;">/ to toggle</span></div>
-    <div style="display:flex;gap:4px;align-items:center;">
-      <div class="panel-color-dot" data-panel="tasks" style="background:#e8520a;" title="Change color"></div>
-      <div class="panel-color-dot" data-panel="tasks" style="background:#7aadff;" title="Change color"></div>
-      <div class="panel-color-dot" data-panel="tasks" style="background:#7adf7a;" title="Change color"></div>
-      <div class="panel-color-dot" data-panel="tasks" style="background:#b78aff;" title="Change color"></div>
-      <div class="panel-color-dot" data-panel="tasks" style="background:#fbbf24;" title="Change color"></div>
-    </div>
+    <div class="todo-title">Tasks</div>
     <button class="todo-close" id="todo-close">✕</button>
   </div>
   <div class="todo-add">
@@ -2421,7 +2474,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
           <div class="mode-pip" id="mode-pip"></div>
           <div><div class="ct-mode-name" id="ct-mode-name"></div><div class="ct-mode-desc" id="ct-mode-desc"></div></div>
         </div>
-        <div class="ct-right" style="display:flex;align-items:center;gap:7px;"><label class="explain-toggle" id="explain-toggle-design"><input type="checkbox" id="explain-cb-design"><div class="explain-dot"></div>Explain</label><button class="ib" id="quick-action-btn" style="display:none"></button></div></div><div class="shortcuts-bar" id="design-shortcuts"><span class="sc-chip" data-sc="Answer as quick as possible">⚡ Quick</span><span class="sc-chip" data-sc="Use simple plain English, no jargon">💬 Simple</span><span class="sc-chip" data-sc="Give me bullet points only">• Bullets</span><span class="sc-chip" data-sc="Break this down step by step">📶 Steps</span><span class="sc-chip" data-sc="Summarize this in 3 sentences">📝 Summarize</span><span class="sc-chip" data-sc="Give me a pros and cons list">⚖️ Pros & Cons</span><span class="sc-chip" data-sc="Give me 5 alternative ideas">💡 Alternatives</span><span class="sc-chip" data-sc="Rewrite this more clearly and professionally">✏️ Rewrite</span>
+        <div class="ct-right" style="display:flex;align-items:center;gap:7px;"><label class="explain-toggle" id="explain-toggle-design"><input type="checkbox" id="explain-cb-design"><div class="explain-dot"></div>Explain</label><button class="ib" id="quick-action-btn" style="display:none"></button></div></div><div class="shortcuts-bar" id="design-shortcuts"><span class="sc-chip" data-sc="Answer as quick as possible">⚡ Quick</span><span class="sc-chip" data-sc="Use simple plain English, no jargon">💬 Simple</span><span class="sc-chip" data-sc="Give me bullet points only">• Bullets</span><span class="sc-chip" data-sc="Break this down step by step">📶 Steps</span><span class="sc-chip" data-sc="Summarise this in 3 sentences">📝 Summarise</span><span class="sc-chip" data-sc="Give me a pros and cons list">⚖️ Pros & Cons</span><span class="sc-chip" data-sc="Give me 5 alternative ideas">💡 Alternatives</span><span class="sc-chip" data-sc="Rewrite this more clearly and professionally">✏️ Rewrite</span>
       </div>
       <div class="pinned-bar" id="pinned-bar">
         <div class="pin-lbl">📌</div><div class="pin-txt" id="pin-txt"></div>
@@ -2471,8 +2524,10 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
             <button class="fs-btn" id="fs-up">+</button>
           </div>
         </div>
+        <div id="chat-img-preview" class="img-preview-strip" style="display:none;padding:0 0 6px;"></div>
         <div class="ir">
-          <textarea class="ib2" id="input-box" placeholder="Ask anything…" rows="1"></textarea>
+          <label class="img-attach-btn" title="Attach image (or drag & drop)">🖼️<input type="file" id="chat-img-input" accept="image/*" multiple></label>
+          <textarea class="ib2" id="input-box" placeholder="Ask anything… or drag an image here" rows="1"></textarea>
           <button class="sb2" id="send-btn">↑</button>
         </div>
       </div>
@@ -2539,6 +2594,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
 </div>
 
 <div class="toast" id="toast"></div>
+<div id="img-lightbox"><img id="img-lightbox-img" src="" alt=""></div>
 <div id="card-seep"></div>
 
 <!-- Global bug report button — visible on all screens -->
@@ -2610,13 +2666,52 @@ window.addEventListener('DOMContentLoaded',()=>{
   wireNotesEvents();
   wireWorkspaceEvents();
   wireJournalEvents();
-  wirePanelColorDots();
   initThink();
   renderTodo();
   showLanding();
-  // Wire panel tab clicks (smart cross-side opener)
-  $('notes-tab').addEventListener('click',()=>{ smartOpenPanel('notes'); $('notes-panel').classList.add('open'); renderNotesList(); });
-  $('todo-tab').addEventListener('click',()=>{ smartOpenPanel('todo'); $('todo-panel').classList.add('open'); renderTodo(); });
+  // Wire panel tab clicks — per-panel independent side + animation
+  $('notes-tab').addEventListener('click',()=>{
+    const np=$('notes-panel');
+    if(np.classList.contains('open')){
+      const wasOnRight=notesOnRight;
+      closePanelWithAnim(np,notesOnRight,()=>{
+        // After panel closes, animate tab back to home side if it crossed
+        const homeRight=panelsOnRight;
+        if(wasOnRight!==homeRight){
+          animateTabCrossing($('notes-tab'),()=>{
+            notesOnRight=homeRight;
+            localStorage.setItem('r_notes_side',notesOnRight?'right':'left');
+            applyNotesside();
+          });
+        } else { applyNotesside(); }
+        flushNote();
+      });
+    } else {
+      const todoOpen=$('todo-panel').classList.contains('open');
+      if(todoOpen){ smartOpenPanel('notes'); setTimeout(()=>{ applyNotesside(); openPanelWithAnim(np,notesOnRight); renderNotesList(); },180); }
+      else { applyNotesside(); openPanelWithAnim(np,notesOnRight); renderNotesList(); }
+    }
+  });
+  $('todo-tab').addEventListener('click',()=>{
+    const tp=$('todo-panel');
+    if(tp.classList.contains('open')){
+      const wasOnRight=todoOnRight;
+      closePanelWithAnim(tp,todoOnRight,()=>{
+        const homeRight=panelsOnRight;
+        if(wasOnRight!==homeRight){
+          animateTabCrossing($('todo-tab'),()=>{
+            todoOnRight=homeRight;
+            localStorage.setItem('r_todo_side',todoOnRight?'right':'left');
+            applyTodoSide();
+          });
+        } else { applyTodoSide(); }
+      });
+    } else {
+      const notesOpen=$('notes-panel').classList.contains('open');
+      if(notesOpen){ smartOpenPanel('todo'); setTimeout(()=>{ applyTodoSide(); openPanelWithAnim(tp,todoOnRight); renderTodo(); },180); }
+      else { applyTodoSide(); openPanelWithAnim(tp,todoOnRight); renderTodo(); }
+    }
+  });
 });
 
 // ── WIRE ALL EVENTS (no inline onclick) ──
@@ -2667,6 +2762,10 @@ function wireEvents(){
   $('land-theme-btn').addEventListener('click', toggleTheme);
   $('land-panels-btn').addEventListener('click', togglePanelsSide);
   $('land-key-btn').addEventListener('click', openKeyModal);
+  // Dock collapse
+  $('dock-collapse-btn').addEventListener('click', toggleDockCollapse);
+  // Mind map
+  $('land-layout-btn').addEventListener('click', toggleLayout);
   // Workspace
   $('land-ws-btn').addEventListener('click', ()=>{openWorkspace();});
   $('ws-back-btn').addEventListener('click', showLanding);
@@ -3300,7 +3399,9 @@ let thinkKey = localStorage.getItem('r_groq')||''; // shared key
 let thinkMode = 'homework';
 let thinkPersonality = 'casual';
 let thinkExplain = false;
-let thinkHistory = []; // {role, content}
+function _loadThinkHist(){ try{return JSON.parse(localStorage.getItem('r_thinkhist')||'[]');}catch{return[];} }
+function _saveThinkHist(h){ try{localStorage.setItem('r_thinkhist',JSON.stringify(h.slice(-30)));}catch{} }
+let thinkHistory = _loadThinkHist(); // {role, content}
 let thinkChats = JSON.parse(localStorage.getItem('r_think_chats')||'{}');
 
 const THINK_MODES = {
@@ -3504,10 +3605,9 @@ async function sendThinkMsg(){
   const ta=$('think-input');
   const text=ta.value.trim();
   if(!text) return;
-  if(!thinkKey){toast('Add a Think API key first');return;}
+  if(!thinkKey){toast('Add an API key first');return;}
   ta.value=''; autoResize(ta);
   appendThinkMsg('user', text);
-  // typing indicator
   const typing=document.createElement('div');
   typing.className='think-typing';
   typing.innerHTML='<span></span><span></span><span></span>';
@@ -3517,41 +3617,27 @@ async function sendThinkMsg(){
   const personality=PERSONALITIES[thinkPersonality].prompt;
   const systemPrompt=THINK_PROMPTS[thinkMode](personality, thinkExplain);
 
-  // Add todo context for PM mode
   let extra='';
   if(thinkMode==='pm'){
     const todos=getTodos();
     if(todos.length) extra=`\n\nUser's current to-do list:\n${todos.map((t,i)=>`${i+1}. [${t.done?'x':' '}] ${t.text}`).join('\n')}`;
   }
 
-  thinkHistory.push({role:'user',content:text});
+  thinkHistory.push({role:'user',content:text}); _saveThinkHist(thinkHistory);
 
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
+    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':thinkKey,'anthropic-version':'2023-06-01'},
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+thinkKey},
       body:JSON.stringify({
-        model:'claude-haiku-4-5-20251001',
+        model:'llama-3.3-70b-versatile',
         max_tokens:1500,
-        system:systemPrompt+extra,
-        messages:thinkHistory
+        messages:[{role:'system',content:systemPrompt+extra},...thinkHistory]
       })
     });
-    // fallback to Groq if Anthropic fails
-    let reply='';
-    if(res.ok){
-      const data=await res.json();
-      reply=data.content?.[0]?.text||'';
-    } else {
-      const gr=await fetch('https://api.groq.com/openai/v1/chat/completions',{
-        method:'POST',
-        headers:{'Content-Type':'application/json','Authorization':'Bearer '+thinkKey},
-        body:JSON.stringify({model:'llama-3.3-70b-versatile',max_tokens:1500,messages:[{role:'system',content:systemPrompt+extra},...thinkHistory]})
-      });
-      const gd=await gr.json();
-      reply=gd.choices?.[0]?.message?.content||'Something went wrong.';
-    }
-    thinkHistory.push({role:'assistant',content:reply});
+    const data=await res.json();
+    const reply=data.choices?.[0]?.message?.content||'No response.';
+    thinkHistory.push({role:'assistant',content:reply}); _saveThinkHist(thinkHistory);
     typing.remove();
     appendThinkMsg('ai', reply, true);
   } catch(err){
@@ -3614,7 +3700,14 @@ function deleteTodo(i){
 
 function wireTodoEvents(){
   // Tab click handled by smartOpenPanel (wired after DOMContentLoaded)
-  $('todo-close').addEventListener('click',()=>$('todo-panel').classList.remove('open'));
+  $('todo-close').addEventListener('click',()=>{
+  const wasR=todoOnRight;
+  closePanelWithAnim($('todo-panel'),todoOnRight,()=>{
+    const homeR=panelsOnRight;
+    if(wasR!==homeR){animateTabCrossing($('todo-tab'),()=>{todoOnRight=homeR;localStorage.setItem('r_todo_side',todoOnRight?'right':'left');applyTodoSide();});}
+    else applyTodoSide();
+  });
+});
   $('todo-add-btn').addEventListener('click',addTodo);
   $('todo-input').addEventListener('keydown',e=>{if(e.key==='Enter')addTodo();});
 }
@@ -3628,13 +3721,30 @@ document.addEventListener('keydown', e=>{
       e.target.blur();
       return;
     }
+    // When not in input, backtick toggles panel side
+    e.preventDefault();
+    togglePanelsSide();
+    return;
+  }
+  if(e.key==='='){
+    e.preventDefault();
+    toggleDockCollapse();
+    return;
   }
   if(['INPUT','TEXTAREA'].includes(e.target.tagName)) return;
   if(e.key==='\\'){
     e.preventDefault();
     const n=$('notes-panel');
-    if(n.classList.contains('open')){flushNote();n.classList.remove('open');}
-    else{smartOpenPanel('notes');n.classList.add('open');renderNotesList();}
+    if(n.classList.contains('open')){
+      const wasR=notesOnRight;
+      closePanelWithAnim(n,notesOnRight,()=>{
+        const homeR=panelsOnRight;
+        if(wasR!==homeR){animateTabCrossing($('notes-tab'),()=>{notesOnRight=homeR;localStorage.setItem('r_notes_side',notesOnRight?'right':'left');applyNotesside();});}
+        else applyNotesside();
+        flushNote();
+      });
+    }
+    else{const td2=$('todo-panel').classList.contains('open');if(td2){smartOpenPanel('notes');setTimeout(()=>{applyNotesside();openPanelWithAnim(n,notesOnRight);renderNotesList();},180);}else{applyNotesside();openPanelWithAnim(n,notesOnRight);renderNotesList();}}
   }
   if(e.key==="'"){
     e.preventDefault();
@@ -3645,8 +3755,15 @@ document.addEventListener('keydown', e=>{
   if(e.key==='/'){
     e.preventDefault();
     const t=$('todo-panel');
-    if(t.classList.contains('open'))t.classList.remove('open');
-    else{smartOpenPanel('todo');t.classList.add('open');renderTodo();}
+    if(t.classList.contains('open')){
+      const wasR=todoOnRight;
+      closePanelWithAnim(t,todoOnRight,()=>{
+        const homeR=panelsOnRight;
+        if(wasR!==homeR){animateTabCrossing($('todo-tab'),()=>{todoOnRight=homeR;localStorage.setItem('r_todo_side',todoOnRight?'right':'left');applyTodoSide();});}
+        else applyTodoSide();
+      });
+    }
+    else{const nd2=$('notes-panel').classList.contains('open');if(nd2){smartOpenPanel('todo');setTimeout(()=>{applyTodoSide();openPanelWithAnim(t,todoOnRight);renderTodo();},180);}else{applyTodoSide();openPanelWithAnim(t,todoOnRight);renderTodo();}}
   }
 });
 
@@ -3662,7 +3779,16 @@ function saveNotes(arr){ localStorage.setItem('r_notes', JSON.stringify(arr)); }
 
 function wireNotesEvents(){
   // Tab click handled by smartOpenPanel (wired after DOMContentLoaded)
-  $('notes-close').addEventListener('click',()=>{ $('notes-panel').classList.remove('open'); flushNote(); });
+  renderFolderTabs(); // render persisted folders on init
+  $('notes-close').addEventListener('click',()=>{
+  const wasR=notesOnRight;
+  closePanelWithAnim($('notes-panel'),notesOnRight,()=>{
+    const homeR=panelsOnRight;
+    if(wasR!==homeR){animateTabCrossing($('notes-tab'),()=>{notesOnRight=homeR;localStorage.setItem('r_notes_side',notesOnRight?'right':'left');applyNotesside();});}
+    else applyNotesside();
+    flushNote();
+  });
+});
   $('notes-add-btn').addEventListener('click', createNote);
   $('notes-add-folder').addEventListener('click', addFolder);
   $('notes-note-title').addEventListener('input', scheduleNoteSave);
@@ -3761,23 +3887,93 @@ function deleteActiveNote(){
   showNoteEditor(null);
 }
 
+// ── NOTES FOLDER PERSISTENCE ──
+function getFolders(){ try{return JSON.parse(localStorage.getItem('r_note_folders')||'[]');}catch{return[];} }
+function saveFolders(arr){ localStorage.setItem('r_note_folders',JSON.stringify(arr)); }
+
 function addFolder(){
   const name=prompt('Folder name:','');
-  if(!name) return;
+  if(!name||!name.trim()) return;
   const emoji=prompt('Emoji (optional):','');
-  const label=(emoji?emoji+' ':'')+name;
-  const id=name.toLowerCase().replace(/\s+/g,'_');
-  const div=document.createElement('div');
-  div.className='notes-folder';
-  div.dataset.folder=id;
-  div.textContent=label;
-  div.addEventListener('click',()=>{
-    notesFolder=id;
-    document.querySelectorAll('.notes-folder[data-folder]').forEach(x=>x.classList.remove('active'));
-    div.classList.add('active');
-    activeNoteId=null; renderNotesList(); showNoteEditor(null);
+  const label=(emoji&&emoji.trim()?emoji.trim()+' ':'')+name.trim();
+  const id='f_'+Date.now();
+  const folders=getFolders();
+  folders.push({id,label});
+  saveFolders(folders);
+  renderFolderTabs();
+  setNotesFolder(id);
+  toast('📁 Folder created');
+}
+
+function setNotesFolder(id){
+  notesFolder=id;
+  document.querySelectorAll('.notes-folder[data-folder]').forEach(x=>x.classList.remove('active'));
+  const tab=document.querySelector('.notes-folder[data-folder="'+id+'"]');
+  if(tab) tab.classList.add('active');
+  activeNoteId=null; renderNotesList(); showNoteEditor(null);
+}
+
+function renderFolderTabs(){
+  const container=$('notes-folders');
+  if(!container) return;
+  container.innerHTML='';
+  const builtIn=[{id:'all',label:'All'},{id:'ideas',label:'💡 Ideas'},{id:'design',label:'⚙️ Design'},{id:'research',label:'🔬 Research'}];
+  builtIn.forEach(f=>{
+    const div=document.createElement('div');
+    div.className='notes-folder'+(notesFolder===f.id?' active':'');
+    div.dataset.folder=f.id;
+    div.textContent=f.label;
+    div.addEventListener('click',()=>setNotesFolder(f.id));
+    container.appendChild(div);
   });
-  $('notes-add-folder').before(div);
+  getFolders().forEach(f=>{
+    const div=document.createElement('div');
+    div.className='notes-folder'+(notesFolder===f.id?' active':'');
+    div.dataset.folder=f.id;
+    div.style.display='flex';div.style.alignItems='center';div.style.gap='4px';
+    const lbl=document.createElement('span');lbl.textContent=f.label;
+    lbl.addEventListener('click',e=>{e.stopPropagation();setNotesFolder(f.id);});
+    const actions=document.createElement('span');
+    actions.style.cssText='display:none;gap:2px;align-items:center;margin-left:2px;';
+    actions.className='folder-actions';
+    const renBtn=document.createElement('button');
+    renBtn.textContent='✏️';renBtn.title='Rename';
+    renBtn.style.cssText='background:none;border:none;cursor:pointer;font-size:9px;padding:0;opacity:.7;';
+    renBtn.addEventListener('click',e=>{
+      e.stopPropagation();
+      const n=prompt('New name:',f.label.replace(/^\S+\s/,''));
+      if(!n||!n.trim())return;
+      const em=f.label.match(/^(\S+)\s/)?.[1]||'';
+      f.label=(em?em+' ':'')+n.trim();
+      const folders=getFolders();
+      const idx=folders.findIndex(x=>x.id===f.id);
+      if(idx>=0){folders[idx].label=f.label;saveFolders(folders);}
+      renderFolderTabs();
+    });
+    const delBtn=document.createElement('button');
+    delBtn.textContent='✕';delBtn.title='Delete folder';
+    delBtn.style.cssText='background:none;border:none;cursor:pointer;font-size:9px;padding:0;opacity:.7;';
+    delBtn.addEventListener('click',e=>{
+      e.stopPropagation();
+      if(!confirm('Delete "'+f.label+'"? Notes move to Ideas.'))return;
+      const notes=getNotes().map(n=>n.folder===f.id?{...n,folder:'ideas'}:n);
+      saveNotes(notes);
+      const folders=getFolders().filter(x=>x.id!==f.id);
+      saveFolders(folders);
+      if(notesFolder===f.id) notesFolder='all';
+      renderFolderTabs(); renderNotesList();
+      toast('Folder deleted');
+    });
+    actions.appendChild(renBtn);actions.appendChild(delBtn);
+    div.addEventListener('mouseenter',()=>actions.style.display='flex');
+    div.addEventListener('mouseleave',()=>actions.style.display='none');
+    div.appendChild(lbl);div.appendChild(actions);
+    container.appendChild(div);
+  });
+  const add=document.createElement('div');
+  add.className='notes-folder add-folder';add.id='notes-add-folder';add.textContent='+ Folder';
+  add.addEventListener('click',addFolder);
+  container.appendChild(add);
 }
 
 // ═══════════════════════════════════════════════════════
@@ -3945,15 +4141,19 @@ const WS_CONFIG = {
 };
 
 // Per-workspace state
+// Load persisted ws histories
+function _loadWsHistory(ws){ try{return JSON.parse(localStorage.getItem('r_wshist_'+ws)||'[]');}catch{return[];} }
+function _saveWsHistory(ws,hist){ try{localStorage.setItem('r_wshist_'+ws,JSON.stringify(hist.slice(-40)));}catch{} }
+
 const wsState = {
-  forge:   { mode:'debugger', history:[], explain:false, incog:false, personality:'casual' },
-  flow:    { mode:'writing',  history:[], explain:false, incog:false, personality:'casual' },
-  pulse:   { mode:'training', history:[], explain:false, incog:false, personality:'casual' },
-  lens:    { mode:'trends',   history:[], explain:false, incog:false, personality:'casual' },
-  script:  { mode:'fusion',   history:[], explain:false, incog:false, personality:'casual' },
-  launch:  { mode:'resume',   history:[], explain:false, incog:false, personality:'casual' },
-  mind:    { mode:'spiral',   history:[], explain:false, incog:false, personality:'casual' },
-  connect: { mode:'vibe',     history:[], explain:false, incog:false, personality:'casual' },
+  forge:   { mode:'debugger', history:_loadWsHistory('forge'), explain:false, incog:false, personality:'casual' },
+  flow:    { mode:'writing',  history:_loadWsHistory('flow'),  explain:false, incog:false, personality:'casual' },
+  pulse:   { mode:'training', history:_loadWsHistory('pulse'), explain:false, incog:false, personality:'casual' },
+  lens:    { mode:'trends',   history:_loadWsHistory('lens'),  explain:false, incog:false, personality:'casual' },
+  script:  { mode:'fusion',   history:_loadWsHistory('script'),explain:false, incog:false, personality:'casual' },
+  launch:  { mode:'resume',   history:_loadWsHistory('launch'),explain:false, incog:false, personality:'casual' },
+  mind:    { mode:'spiral',   history:_loadWsHistory('mind'),  explain:false, incog:false, personality:'casual' },
+  connect: { mode:'vibe',     history:_loadWsHistory('connect'),explain:false, incog:false, personality:'casual' },
 };
 
 function wireWorkspaceEvents(){
@@ -4113,7 +4313,7 @@ async function sendWsMsg(ws){
     if(!res.ok){const e=await res.json();appendWsMsg(ws,'ai','⚠️ Error: '+(e.error?.message||res.status));return;}
     const data = await res.json();
     const reply = data.choices?.[0]?.message?.content||'No response.';
-    if(!state.incog) state.history.push({role:'assistant',content:reply});
+    if(!state.incog){ state.history.push({role:'assistant',content:reply}); _saveWsHistory(ws,state.history); }
     appendWsMsg(ws,'ai',reply,true);
   } catch(err){
     typing.remove();
@@ -4719,19 +4919,123 @@ function appendJournalAIMsg(role,text){
   $('journal-ai-msgs').scrollTop=$('journal-ai-msgs').scrollHeight;
 }
 
-// ── PANELS SIDE TOGGLE ──
+// ── PER-PANEL SIDE STATE (each panel independent) ──
+let notesOnRight = localStorage.getItem('r_notes_side')==='right';
+let todoOnRight  = localStorage.getItem('r_todo_side')==='right';
+let journalOnRight = localStorage.getItem('r_journal_side')==='right';
 let panelsOnRight = localStorage.getItem('r_panels_side')==='right';
 
-function applyPanelsSide(){
-  if(panelsOnRight){
-    document.body.classList.add('panels-right');
+function _applyTabSide(tabEl, onRight){
+  if(!tabEl) return;
+  if(onRight){
+    tabEl.style.left='auto'; tabEl.style.right='0';
+    tabEl.style.borderLeft='1px solid var(--border2)'; tabEl.style.borderRight='none';
+    tabEl.style.borderRadius='18px 0 0 18px';
+    tabEl.style.boxShadow='-4px 0 20px rgba(0,0,0,.28)';
   } else {
-    document.body.classList.remove('panels-right');
+    tabEl.style.left='0'; tabEl.style.right='auto';
+    tabEl.style.borderRight='1px solid var(--border2)'; tabEl.style.borderLeft='none';
+    tabEl.style.borderRadius='0 18px 18px 0';
+    tabEl.style.boxShadow='4px 0 20px rgba(0,0,0,.28)';
   }
-  // Update tab tooltips
-  const notesTab=$('notes-tab'), todoTab=$('todo-tab'), journalTab=$('journal-tab');
-  const side=panelsOnRight?'right':'left';
-  [notesTab,todoTab,journalTab].forEach(t=>{if(t)t.dataset.side=side;});
+}
+
+function _animatePanel(panel, onRight, isOpening){
+  if(!panel) return;
+  // Temporarily disable CSS left/right transition to prevent conflict
+  const prevTrans=panel.style.transition;
+  panel.style.transition='none';
+  panel.classList.remove('panel-anim-from-left','panel-anim-from-right','panel-anim-to-left','panel-anim-to-right');
+  void panel.offsetWidth;
+  if(isOpening){
+    panel.classList.add(onRight ? 'panel-anim-from-right' : 'panel-anim-from-left');
+  } else {
+    panel.classList.add(onRight ? 'panel-anim-to-right' : 'panel-anim-to-left');
+  }
+  setTimeout(()=>{
+    panel.classList.remove('panel-anim-from-left','panel-anim-from-right','panel-anim-to-left','panel-anim-to-right');
+    panel.style.transition=prevTrans;
+  }, 320);
+}
+
+function applyNotesside(animate=false){
+  const tab=$('notes-tab'), panel=$('notes-panel');
+  if(!tab||!panel) return;
+  _applyTabSide(tab, notesOnRight);
+  const isOpen=panel.classList.contains('open');
+  if(notesOnRight){
+    panel.style.left='auto'; panel.style.right=isOpen?'0':'-340px';
+    panel.style.borderRight='none'; panel.style.borderLeft='1px solid var(--border2)';
+    panel.style.boxShadow='-8px 0 32px rgba(0,0,0,.3)';
+  } else {
+    panel.style.right='auto'; panel.style.left=isOpen?'0':'-340px';
+    panel.style.borderLeft='none'; panel.style.borderRight='1px solid var(--border2)';
+    panel.style.boxShadow='8px 0 32px rgba(0,0,0,.3)';
+  }
+  if(animate&&isOpen) _animatePanel(panel, notesOnRight, true);
+  // Also fire canvas ripple from the panel edge
+  if(animate&&isOpen){
+    const edgeX=notesOnRight?window.innerWidth:0;
+    addCanvasRipple(edgeX, window.innerHeight/2, document.body.classList.contains('light')?'30,30,30':'200,200,200');
+  }
+}
+
+function applyTodoSide(animate=false){
+  const tab=$('todo-tab'), panel=$('todo-panel');
+  if(!tab||!panel) return;
+  _applyTabSide(tab, todoOnRight);
+  const isOpen=panel.classList.contains('open');
+  if(todoOnRight){
+    panel.style.left='auto'; panel.style.right=isOpen?'0':'-320px';
+    panel.style.borderRight='none'; panel.style.borderLeft='1px solid var(--border2)';
+    panel.style.boxShadow='-8px 0 32px rgba(0,0,0,.3)';
+  } else {
+    panel.style.right='auto'; panel.style.left=isOpen?'0':'-320px';
+    panel.style.borderLeft='none'; panel.style.borderRight='1px solid var(--border2)';
+    panel.style.boxShadow='8px 0 32px rgba(0,0,0,.3)';
+  }
+  if(animate&&isOpen) _animatePanel(panel, todoOnRight, true);
+  if(animate&&isOpen){
+    const edgeX=todoOnRight?window.innerWidth:0;
+    addCanvasRipple(edgeX, window.innerHeight/2, document.body.classList.contains('light')?'30,30,30':'200,200,200');
+  }
+}
+
+function applyJournalSide(){
+  const tab=$('journal-tab');
+  if(!tab) return;
+  _applyTabSide(tab, journalOnRight);
+}
+
+function openPanelWithAnim(panelEl, onRight){
+  panelEl.classList.add('open');
+  // Ensure panel is positioned correctly before animating
+  if(onRight){ panelEl.style.right='0'; panelEl.style.left='auto'; }
+  else { panelEl.style.left='0'; panelEl.style.right='auto'; }
+  _animatePanel(panelEl, onRight, true);
+  const edgeX=onRight?window.innerWidth:0;
+  const ripCol=document.body.classList.contains('light')?'50,50,50':'180,180,180';
+  addCanvasRipple(edgeX, window.innerHeight/2, ripCol);
+}
+
+function closePanelWithAnim(panelEl, onRight, cb){
+  _animatePanel(panelEl, onRight, false);
+  setTimeout(()=>{
+    panelEl.classList.remove('open');
+    // Reset position so CSS transition works again for re-open
+    if(onRight){ panelEl.style.right='-340px'; panelEl.style.left='auto'; }
+    else { panelEl.style.left='-340px'; panelEl.style.right='auto'; }
+    if(cb) cb();
+  }, 260);
+}
+
+function applyPanelsSide(){
+  // Move all 3 panels+tabs to same side
+  notesOnRight=panelsOnRight; todoOnRight=panelsOnRight; journalOnRight=panelsOnRight;
+  localStorage.setItem('r_notes_side',panelsOnRight?'right':'left');
+  localStorage.setItem('r_todo_side',panelsOnRight?'right':'left');
+  localStorage.setItem('r_journal_side',panelsOnRight?'right':'left');
+  applyNotesside(); applyTodoSide(); applyJournalSide();
 }
 
 function togglePanelsSide(){
@@ -4740,49 +5044,55 @@ function togglePanelsSide(){
   applyPanelsSide();
   toast(panelsOnRight?'Panels → right side':'Panels → left side');
 }
-applyPanelsSide();
+
+// Init
+notesOnRight = localStorage.getItem('r_notes_side')==='right';
+todoOnRight  = localStorage.getItem('r_todo_side')==='right';
+journalOnRight = localStorage.getItem('r_journal_side')==='right';
+setTimeout(()=>{ applyNotesside(); applyTodoSide(); applyJournalSide(); },0);
 
 // ── CROSS-SIDE ANIMATION: if notes open→todo opens, animate to opposite side ──
 function smartOpenPanel(openingPanel){
   const notesOpen=$('notes-panel').classList.contains('open');
   const todoOpen=$('todo-panel').classList.contains('open');
 
-  // If opening notes and todo is open, animate todo to other side
   if(openingPanel==='notes' && todoOpen){
-    const todoPanel=$('todo-panel');
-    const todoTab=$('todo-tab');
-    todoPanel.classList.add('panel-sliding-out');
-    setTimeout(()=>{
-      todoPanel.classList.remove('open');
-      todoPanel.classList.remove('panel-sliding-out');
-      panelsOnRight=!panelsOnRight;
-      localStorage.setItem('r_panels_side',panelsOnRight?'right':'left');
-      applyPanelsSide();
-      setTimeout(()=>{
-        todoPanel.classList.add('panel-sliding-in');
-        todoPanel.classList.add('open');
-        setTimeout(()=>todoPanel.classList.remove('panel-sliding-in'),350);
-      },50);
-    },350);
+    // Move ONLY the notes tab to opposite side of where todo currently is
+    const targetRight=!todoOnRight;
+    animateTabCrossing($('notes-tab'), ()=>{
+      notesOnRight=targetRight;
+      localStorage.setItem('r_notes_side',notesOnRight?'right':'left');
+      applyNotesside();
+    });
+  } else if(openingPanel==='todo' && notesOpen){
+    // Move ONLY the todo tab to opposite side of where notes currently is
+    const targetRight=!notesOnRight;
+    animateTabCrossing($('todo-tab'), ()=>{
+      todoOnRight=targetRight;
+      localStorage.setItem('r_todo_side',todoOnRight?'right':'left');
+      applyTodoSide();
+    });
   }
-  // If opening todo and notes is open, animate notes to other side
-  if(openingPanel==='todo' && notesOpen){
-    const notesPanel=$('notes-panel');
-    notesPanel.classList.add('panel-sliding-out');
-    setTimeout(()=>{
-      notesPanel.classList.remove('open');
-      notesPanel.classList.remove('panel-sliding-out');
-      panelsOnRight=!panelsOnRight;
-      localStorage.setItem('r_panels_side',panelsOnRight?'right':'left');
-      applyPanelsSide();
-      setTimeout(()=>{
-        notesPanel.classList.add('panel-sliding-in');
-        notesPanel.classList.add('open');
-        renderNotesList();
-        setTimeout(()=>notesPanel.classList.remove('panel-sliding-in'),350);
-      },50);
-    },350);
-  }
+}
+
+// Animate ONE tab flying up and down to its new side position
+function animateTabCrossing(tabEl, onMidpoint){
+  if(!tabEl){ if(onMidpoint)onMidpoint(); return; }
+  tabEl.style.transition='transform .16s cubic-bezier(.4,0,.8,0), opacity .14s';
+  tabEl.style.transform='translateY(-115vh)';
+  tabEl.style.opacity='0';
+  setTimeout(()=>{
+    if(onMidpoint) onMidpoint(); // update side state while invisible
+    tabEl.style.transition='none';
+    tabEl.style.transform='translateY(115vh)';
+    tabEl.style.opacity='0';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      tabEl.style.transition='transform .19s cubic-bezier(.2,0,.2,1), opacity .15s';
+      tabEl.style.transform='translateY(0)';
+      tabEl.style.opacity='1';
+      setTimeout(()=>{ tabEl.style.transition=''; tabEl.style.transform=''; tabEl.style.opacity=''; },210);
+    }));
+  },170);
 }
 
 // Panel tab clicks wired in wireEvents via wirePanelTabs()
@@ -4918,12 +5228,16 @@ function smartOpenPanel(openingPanel){
     // ── Canvas ripples (theme switch, panel open) ──
     if(window._getCanvasRipples){
       window._getCanvasRipples().forEach(r=>{
-        const rg=ctx.createRadialGradient(r.x,r.y,Math.max(0,r.r-30),r.x,r.y,r.r);
+        const rg=ctx.createRadialGradient(r.x,r.y,Math.max(0,r.r*0.7),r.x,r.y,r.r);
         rg.addColorStop(0,`rgba(${r.color},0)`);
-        rg.addColorStop(0.5,`rgba(${r.color},${r.alpha})`);
+        rg.addColorStop(0.65,`rgba(${r.color},${r.alpha})`);
         rg.addColorStop(1,`rgba(${r.color},0)`);
         ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,Math.PI*2);
         ctx.fillStyle=rg;ctx.fill();
+        // Draw crisp ring border
+        ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,Math.PI*2);
+        ctx.strokeStyle=`rgba(${r.color},${r.alpha*0.6})`;
+        ctx.lineWidth=1.5;ctx.stroke();
       });
       window._tickRipples&&window._tickRipples();
     }
@@ -5155,15 +5469,15 @@ function removeTagFromMsg(msgId,tag){
 // ── CANVAS RIPPLES STATE ──
 let canvasRipples=[];
 function addCanvasRipple(x,y,color){
-  canvasRipples.push({x,y,r:0,maxR:Math.hypot(window.innerWidth,window.innerHeight),alpha:0.22,color,born:Date.now()});
+  canvasRipples.push({x,y,r:0,maxR:Math.hypot(window.innerWidth,window.innerHeight)*1.1,alpha:0.55,color,born:Date.now()});
 }
 
 // ── THEME RIPPLE — canvas only, no DOM overlay ──
 function triggerThemeRipple(x,y,toDark){
   // Just fire multiple canvas ripples for a wave effect
   const col = toDark ? '220,220,220' : '30,30,30';
-  for(let i=0;i<3;i++){
-    setTimeout(()=>addCanvasRipple(x,y,col),i*80);
+  for(let i=0;i<5;i++){
+    setTimeout(()=>addCanvasRipple(x,y,col),i*60);
   }
 }
 
@@ -5232,6 +5546,19 @@ let _screenTransitioning=false;
 (function(){
   const _orig=setScreen;
   setScreen=function(id){
+    // Always hide layout canvas when navigating away from landing
+    if(id!=='landing-screen'){
+      const lc=$('layout-canvas');
+      if(lc){lc.style.display='none';lc.style.opacity='';}
+      if(window.layoutActive){
+        window.layoutActive=false;
+        if(window.layoutAnimFrame){cancelAnimationFrame(window.layoutAnimFrame);window.layoutAnimFrame=null;}
+        const scroll=document.querySelector('#landing-screen .land-scroll');
+        if(scroll){scroll.style.opacity='1';scroll.style.transform='';scroll.style.pointerEvents='';}
+        const btn=$('land-layout-btn');
+        if(btn){btn.style.background='';btn.style.color='';}
+      }
+    }
     if(_screenTransitioning){ _orig(id); return; }
     _screenTransitioning=true;
     const cur=document.querySelector('.screen.active');
@@ -5370,9 +5697,902 @@ setTimeout(()=>{
   hookPanelWaves();
 },200);
 
+
+// ── WORKSPACE NUMBER SHORTCUTS (1-9, 0=10th) ──
+const CARD_SHORTCUTS = {
+  '1':'land-design-btn','2':'land-think-btn','3':'land-forge-btn',
+  '4':'land-script-btn','5':'land-flow-btn','6':'land-pulse-btn',
+  '7':'land-lens-btn','8':'land-launch-btn','9':'land-mind-btn','0':'land-connect-btn'
+};
+document.addEventListener('keydown', e=>{
+  if(['INPUT','TEXTAREA'].includes(e.target.tagName)) return;
+  if(!$('landing-screen').classList.contains('active')) return;
+  const btnId=CARD_SHORTCUTS[e.key];
+  if(btnId){
+    e.preventDefault();
+    const btn=$(btnId);
+    if(btn) btn.click();
+  }
+});
+
+// ── DOCK COLLAPSE ──
+let dockCollapsed=false;
+function toggleDockCollapse(){
+  dockCollapsed=!dockCollapsed;
+  $('land-dock').classList.toggle('collapsed',dockCollapsed);
+}
+
+// ── ORBITAL LAYOUT ENGINE v2 ──
+window.layoutActive = false;
+window.layoutAnimFrame = null;
+let layoutActive = false;
+let layoutAnimFrame = null;
+let layoutTransitioning = false;
+let mmPreviewNode = null;
+let mmPreviewAlpha = 0;
+let mmPreviewTypeIdx = 0;
+let mmPreviewTypeTimer = null;
+let mmHoverTimer = null;
+let mmMouse = {x:-9999, y:-9999};
+let mmFrame = 0;
+let mmOrbitState = [];
+
+// Card positions captured before morph (for animation)
+let cardMorphTargets = [];
+
+const MM_NODES = [
+  {id:'center', label:'Resonant', labelB:'AI', r:72, accent:null, btnId:null, orbit:0, speed:0, angle:0,
+   desc:'Your AI ecosystem — 10 specialized workspaces, each purpose-built for a different kind of thinking.'},
+  {id:'build',   label:'Build',   r:30, accent:'#e8520a', textColor:'#fff', btnId:'land-design-btn', orbit:1, speed:0.00038, angle:0.31,
+   sub:'Hardware & Prototyping',
+   desc:'Mechanical design, hardware engineering, physical prototyping. Deep expertise in CAD, materials, and manufacturing.'},
+  {id:'learn',   label:'Learn',   r:34, accent:'#7aadff', textColor:'#fff', btnId:'land-think-btn',  orbit:2, speed:-0.00025, angle:2.20,
+   sub:'Accelerated Learning',
+   desc:'Lock In, Feynman Technique, Flashcard Gen, Deep Research. Built for students who need precision without waste.'},
+  {id:'forge',   label:'Forge',   r:28, accent:'#fb923c', textColor:'#fff', btnId:'land-forge-btn', orbit:1, speed:-0.00032, angle:4.08,
+   sub:'Software Engineering',
+   desc:'Senior-level coding AI — Debugger, Architect, System Design, API. Production-quality code every time.'},
+  {id:'script',  label:'Script',  r:25, accent:'#63b3ed', textColor:'#fff', btnId:'land-script-btn',orbit:3, speed:0.00042, angle:5.65,
+   sub:'CAD Scripting',
+   desc:'Generative geometry, Fusion 360 Python, OpenSCAD, parametric modeling. Full working scripts, zero skeleton code.'},
+  {id:'create',  label:'Create',  r:30, accent:'#e879f9', textColor:'#fff', btnId:'land-flow-btn',  orbit:2, speed:0.00021, angle:0.63,
+   sub:'Content & Creative',
+   desc:'Essays, brand identity, video scripts, layout design. Sharp editorial instinct — no AI-sounding output.'},
+  {id:'pulse',   label:'Pulse',   r:29, accent:'#34d399', textColor:'#111', btnId:'land-pulse-btn', orbit:1, speed:0.00028, angle:3.14,
+   sub:'Performance Science',
+   desc:'Training, nutrition, competition, recovery, biomechanics. Evidence-based, sport-specific, always precise.'},
+  {id:'lens',    label:'Lens',    r:26, accent:'#fbbf24', textColor:'#111', btnId:'land-lens-btn',  orbit:3, speed:-0.00029, angle:1.57,
+   sub:'Market Intelligence',
+   desc:'Trend forecasting, competitor mapping, pitch decks, financial modeling. Venture analyst meets strategy consultant.'},
+  {id:'launch',  label:'Launch',  r:25, accent:'#fb7185', textColor:'#fff', btnId:'land-launch-btn',orbit:2, speed:-0.00034, angle:3.77,
+   sub:'Career Strategy',
+   desc:'Resume tailoring, cold outreach, interview simulation, offer negotiation. Understands how hiring actually works.'},
+  {id:'mind',    label:'Mind',    r:26, accent:'#6ee7b7', textColor:'#111', btnId:'land-mind-btn',  orbit:3, speed:0.00026, angle:4.71,
+   sub:'Mental Wellness',
+   desc:'CBT spiral stopping, burnout radar, vent mode, anxiety prep. Evidence-based, warm, and never clinical.'},
+  {id:'connect', label:'Connect', r:24, accent:'#93c5fd', textColor:'#111', btnId:'land-connect-btn',orbit:3, speed:-0.00022, angle:6.28,
+   sub:'Social Intelligence',
+   desc:'Vibe check, conflict mediation, small talk, tone polish. Understands subtext — gives you scripts that actually work.'},
+];
+
+function _hexToRgb(hex){
+  const h=hex.replace('#','');
+  return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];
+}
+
+function initLayout(){
+  const W=window.innerWidth, H=window.innerHeight;
+  const cx=W/2, cy=H/2;
+  const minD=Math.min(W,H);
+  const orbR=[0, minD*0.21, minD*0.34, minD*0.46];
+
+  mmOrbitState = MM_NODES.map((n,i)=>{
+    const r=orbR[n.orbit]||0;
+    return {
+      ...n,
+      cx, cy,
+      x: i===0 ? cx : cx + Math.cos(n.angle)*r,
+      y: i===0 ? cy : cy + Math.sin(n.angle)*r,
+      curAngle: n.angle,
+      orbitR: r,
+      displayR: 0,          // starts at 0, grows in
+      targetR: n.r,
+      hovered: false,
+      frozen: false,
+      alpha: 0,
+      spawnDelay: i*60,     // stagger appearance
+    };
+  });
+  mmFrame = 0;
+}
+
+function drawLayout(){
+  const canvas=$('layout-canvas');
+  if(!canvas || !layoutActive) return;
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width=window.innerWidth;
+  const H=canvas.height=window.innerHeight;
+  const cx=W/2, cy=H/2;
+  const isLight=document.body.classList.contains('light');
+  mmFrame++;
+
+  ctx.clearRect(0,0,W,H);
+
+  if(!mmOrbitState.length){ layoutAnimFrame=requestAnimationFrame(drawLayout); return; }
+
+  const center=mmOrbitState[0];
+
+  // ── UPDATE PHYSICS ──
+  mmOrbitState.forEach((n,i)=>{
+    // Spawn stagger
+    if(mmFrame < n.spawnDelay){ n.alpha=0; return; }
+    n.alpha = Math.min(1, n.alpha + 0.035);
+
+    if(i===0){
+      n.displayR += (n.targetR - n.displayR)*0.08;
+      return;
+    }
+    // Orbit
+    if(!n.frozen) n.curAngle += n.speed;
+    n.x = cx + Math.cos(n.curAngle)*n.orbitR;
+    n.y = cy + Math.sin(n.curAngle)*n.orbitR;
+
+    // Hover detect
+    const dist = Math.hypot(n.x - mmMouse.x, n.y - mmMouse.y);
+    const nowHov = dist < n.r*2.0;
+    if(nowHov && !n.hovered){ n.hovered=true; n.frozen=true; }
+    if(!nowHov && n.hovered){ n.hovered=false; n.frozen=false; }
+
+    // Smooth radius - only grows/shrinks toward target, NO runaway
+    const tgt = n.hovered ? n.r*1.55 : n.r;
+    n.displayR += (tgt - n.displayR) * 0.10;
+    n.displayR = Math.max(0, Math.min(n.displayR, n.r*1.6)); // hard clamp
+  });
+
+  // ── ORBIT RINGS ──
+  [1,2,3].forEach(ring=>{
+    const nodes = mmOrbitState.filter(n=>n.orbit===ring);
+    if(!nodes.length) return;
+    const orbR = nodes[0].orbitR;
+    const ringAlpha = Math.min(...nodes.map(n=>n.alpha));
+    ctx.save();
+    ctx.globalAlpha = ringAlpha * (isLight?0.10:0.07);
+    ctx.beginPath();
+    ctx.arc(cx, cy, orbR, 0, Math.PI*2);
+    ctx.strokeStyle = isLight?'#000':'#fff';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3,9]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+  });
+
+  // ── CONNECTION LINES ──
+  mmOrbitState.slice(1).forEach(n=>{
+    if(n.alpha < 0.05) return;
+    const [r,g,b] = _hexToRgb(n.accent);
+    const a = n.hovered ? 0.28 : 0.07;
+    const cp1x = cx + (n.x-cx)*0.4 + (n.y-cy)*0.2;
+    const cp1y = cy + (n.y-cy)*0.4 - (n.x-cx)*0.2;
+    ctx.save();
+    ctx.globalAlpha = n.alpha * a;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.quadraticCurveTo(cp1x, cp1y, n.x, n.y);
+    ctx.strokeStyle = `rgb(${r},${g},${b})`;
+    ctx.lineWidth = n.hovered ? 1.5 : 0.8;
+    ctx.stroke();
+    ctx.restore();
+  });
+
+  // ── CENTER BLACK HOLE ──
+  if(center.alpha > 0){
+    const cr = center.displayR;
+    ctx.save();
+    ctx.globalAlpha = center.alpha;
+
+    // Outer glow rings (slow pulse)
+    for(let g=3; g>=0; g--){
+      const pulse = 0.5 + 0.5*Math.sin(mmFrame*0.015 + g*0.8);
+      const gGrad = ctx.createRadialGradient(cx,cy,cr,cx,cy,cr*(1.6+g*0.5));
+      gGrad.addColorStop(0, `rgba(255,255,255,${(0.04-g*0.008)*pulse})`);
+      gGrad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.beginPath();ctx.arc(cx,cy,cr*(1.6+g*0.5),0,Math.PI*2);
+      ctx.fillStyle=gGrad;ctx.fill();
+    }
+
+    // Core sphere
+    const coreGrad = ctx.createRadialGradient(cx-cr*0.25,cy-cr*0.25,cr*0.05, cx,cy,cr);
+    coreGrad.addColorStop(0, isLight?'rgba(15,15,15,0.98)':'rgba(8,8,8,0.99)');
+    coreGrad.addColorStop(0.7, isLight?'rgba(5,5,5,0.99)':'rgba(3,3,3,0.99)');
+    coreGrad.addColorStop(1, '#000');
+    ctx.beginPath();ctx.arc(cx,cy,cr,0,Math.PI*2);
+    ctx.fillStyle=coreGrad;ctx.fill();
+
+    // Spinning accretion disk
+    ctx.save();ctx.translate(cx,cy);
+    for(let arc=0; arc<4; arc++){
+      const rot = mmFrame*0.006*(arc%2===0?1:-0.7) + arc*(Math.PI/2);
+      ctx.save();ctx.rotate(rot);
+      ctx.beginPath();
+      ctx.arc(0,0,cr+4+arc*5, -0.6, 0.6);
+      ctx.strokeStyle=`rgba(255,255,255,${0.07-arc*0.014})`;
+      ctx.lineWidth = 2-arc*0.3;
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
+
+    // Rim highlight
+    ctx.beginPath();ctx.arc(cx,cy,cr,0,Math.PI*2);
+    ctx.strokeStyle='rgba(255,255,255,0.12)';
+    ctx.lineWidth=1;ctx.stroke();
+
+    // Label
+    ctx.fillStyle='#fff';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.font="700 17px 'Space Grotesk',sans-serif";
+    ctx.fillText('Resonant', cx, cy-9);
+    ctx.font="700 17px 'Space Grotesk',sans-serif";
+    ctx.fillStyle='rgba(255,255,255,0.5)';
+    ctx.fillText('.AI', cx+ctx.measureText('Resonant').width*0.5+6, cy-9);
+    ctx.font="500 8px 'JetBrains Mono',monospace";
+    ctx.fillStyle='rgba(255,255,255,0.32)';
+    ctx.fillText('beta 1.1', cx, cy+9);
+
+    ctx.restore();
+  }
+
+  // ── PLANET NODES ──
+  mmOrbitState.slice(1).forEach(n=>{
+    if(n.alpha < 0.02 || mmFrame < n.spawnDelay) return;
+    const dr = n.displayR;
+    const [r,g,b] = _hexToRgb(n.accent);
+    ctx.save();
+    ctx.translate(n.x, n.y);
+    ctx.globalAlpha = n.alpha;
+
+    // Hover aura
+    if(n.hovered){
+      const aura=ctx.createRadialGradient(0,0,dr,0,0,dr*3.2);
+      aura.addColorStop(0,`rgba(${r},${g},${b},0.22)`);
+      aura.addColorStop(1,`rgba(${r},${g},${b},0)`);
+      ctx.beginPath();ctx.arc(0,0,dr*3.2,0,Math.PI*2);
+      ctx.fillStyle=aura;ctx.fill();
+    }
+
+    // Planet sphere
+    const pGrad=ctx.createRadialGradient(-dr*0.28,-dr*0.28,dr*0.04, 0,0,dr);
+    pGrad.addColorStop(0,`rgba(${Math.min(255,r+70)},${Math.min(255,g+70)},${Math.min(255,b+70)},1)`);
+    pGrad.addColorStop(0.55,`rgba(${r},${g},${b},1)`);
+    pGrad.addColorStop(1,`rgba(${Math.max(0,r-50)},${Math.max(0,g-50)},${Math.max(0,b-50)},1)`);
+    ctx.beginPath();ctx.arc(0,0,dr,0,Math.PI*2);
+    ctx.fillStyle=pGrad;ctx.fill();
+
+    // Shadow
+    const shadow=ctx.createRadialGradient(dr*0.35,dr*0.35,0, dr*0.2,dr*0.2,dr*1.1);
+    shadow.addColorStop(0,'rgba(0,0,0,0)');
+    shadow.addColorStop(1,'rgba(0,0,0,0.45)');
+    ctx.beginPath();ctx.arc(0,0,dr,0,Math.PI*2);
+    ctx.fillStyle=shadow;ctx.fill();
+
+    // Label
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillStyle=n.textColor||'#fff';
+    ctx.font=`700 ${dr>28?12:10}px 'Space Grotesk',sans-serif`;
+    ctx.fillText(n.label, 0, n.hovered&&n.sub?-5:0);
+    if(n.hovered && n.sub){
+      ctx.font=`400 9px 'DM Sans',sans-serif`;
+      ctx.fillStyle=(n.textColor||'#fff')+'bb';
+      ctx.fillText(n.sub, 0, 9);
+    }
+
+    ctx.restore();
+  });
+
+  // ── PREVIEW PANEL ──
+  if(mmPreviewNode && mmPreviewAlpha>0.01) _drawPreviewPanel(ctx,W,H,isLight);
+
+  layoutAnimFrame=requestAnimationFrame(drawLayout);
+  window.layoutAnimFrame=layoutAnimFrame;
+}
+
+function _drawPreviewPanel(ctx,W,H,isLight){
+  const n=mmPreviewNode;
+  if(!n||!n.accent) return;
+  const pw=Math.min(300,W*0.24);
+  const ph=200;
+  const margin=24;
+  const px=(W - pw*mmPreviewAlpha) - margin;
+  const py=(H-ph)/2;
+  const a=mmPreviewAlpha;
+  const [r,g,b]=_hexToRgb(n.accent);
+
+  ctx.save();
+  ctx.globalAlpha=a;
+
+  // Panel bg
+  ctx.beginPath();
+  ctx.roundRect(px,py,pw,ph,14);
+  const bg=ctx.createLinearGradient(px,py,px,py+ph);
+  bg.addColorStop(0, isLight?'rgba(252,252,252,0.97)':'rgba(16,16,16,0.96)');
+  bg.addColorStop(1, isLight?'rgba(244,244,244,0.95)':'rgba(10,10,10,0.94)');
+  ctx.fillStyle=bg;ctx.fill();
+  ctx.strokeStyle=`rgba(${r},${g},${b},0.35)`;
+  ctx.lineWidth=1;ctx.stroke();
+
+  // Accent top bar
+  ctx.beginPath();
+  ctx.roundRect(px,py,pw,3,{upperLeft:14,upperRight:14,lowerLeft:0,lowerRight:0});
+  ctx.fillStyle=n.accent;ctx.fill();
+
+  // Planet icon
+  const icR=18;
+  const pGrad=ctx.createRadialGradient(px+28-icR*0.3,py+34-icR*0.3,icR*0.05,px+28,py+34,icR);
+  pGrad.addColorStop(0,`rgba(${Math.min(255,r+60)},${Math.min(255,g+60)},${Math.min(255,b+60)},1)`);
+  pGrad.addColorStop(1,`rgba(${Math.max(0,r-40)},${Math.max(0,g-40)},${Math.max(0,b-40)},1)`);
+  ctx.beginPath();ctx.arc(px+28,py+34,icR,0,Math.PI*2);
+  ctx.fillStyle=pGrad;ctx.fill();
+  ctx.fillStyle=n.textColor||'#fff';
+  ctx.font="700 9px 'Space Grotesk',sans-serif";
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(n.label,px+28,py+34);
+
+  // Title
+  ctx.textAlign='left';
+  ctx.fillStyle=isLight?'#111':'#f0f0f0';
+  ctx.font="700 14px 'Space Grotesk',sans-serif";
+  ctx.fillText('Resonant. '+n.label, px+54, py+28);
+  ctx.font="400 10px 'DM Sans',sans-serif";
+  ctx.fillStyle=isLight?'rgba(0,0,0,0.42)':'rgba(255,255,255,0.42)';
+  ctx.fillText(n.sub||'', px+54, py+43);
+
+  // Typewriter description
+  const typed=(n.desc||'').substring(0,mmPreviewTypeIdx);
+  ctx.font="12px 'DM Sans',sans-serif";
+  ctx.fillStyle=isLight?'rgba(0,0,0,0.72)':'rgba(255,255,255,0.72)';
+  const maxW=pw-24;
+  let line='', ly=py+68;
+  const words=typed.split(' ');
+  words.forEach((w,i)=>{
+    const test=line+(line?' ':'')+w;
+    if(ctx.measureText(test).width>maxW && line){
+      ctx.fillText(line,px+12,ly); line=w; ly+=17;
+    } else { line=test; }
+  });
+  if(line) ctx.fillText(line,px+12,ly);
+  // blinking cursor
+  if(mmPreviewTypeIdx<(n.desc||'').length && Math.floor(mmFrame/14)%2===0){
+    const cw=ctx.measureText(line).width;
+    ctx.fillStyle=n.accent;
+    ctx.fillRect(px+12+cw+2, ly-11, 1.5, 13);
+  }
+
+  // Launch button
+  if(mmPreviewTypeIdx>=(n.desc||'').length){
+    const bx=px+12, by=py+ph-44, bw=pw-24, bh=28;
+    ctx.beginPath();ctx.roundRect(bx,by,bw,bh,7);
+    ctx.fillStyle=n.accent;ctx.fill();
+    ctx.fillStyle=n.textColor||'#fff';
+    ctx.font="600 11px 'Space Grotesk',sans-serif";
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('Launch →', px+pw/2, by+bh/2);
+  }
+
+  ctx.restore();
+}
+
+// ── MORPH TRANSITION (cards → planets) ──
+function _getMorphTargets(){
+  // Get bounding rects of landing cards to animate FROM
+  const map={};
+  document.querySelectorAll('.land-card[id]').forEach(card=>{
+    const rect=card.getBoundingClientRect();
+    map[card.id]={
+      x: rect.left+rect.width/2,
+      y: rect.top+rect.height/2,
+      w: rect.width, h: rect.height
+    };
+  });
+  return map;
+}
+
+function _runMorphIn(onDone){
+  // Snapshot card positions, animate canvas overlay
+  const morphTargets=_getMorphTargets();
+  const canvas=$('layout-canvas');
+  const ctx=canvas.getContext('2d');
+  canvas.style.display='block'; canvas.style.opacity='1';
+  const isLight=document.body.classList.contains('light');
+  const W=canvas.width=window.innerWidth;
+  const H=canvas.height=window.innerHeight;
+  const cx=W/2, cy=H/2;
+
+  let t=0;
+  const DURATION=55; // frames ~= 900ms at 60fps
+
+  function easeInOut(t){ return t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2; }
+
+  function frame(){
+    t++;
+    const p=Math.min(1, t/DURATION);
+    const ep=easeInOut(p);
+    ctx.clearRect(0,0,W,H);
+
+    // Fade out landing content
+    const scroll=document.querySelector('#landing-screen .land-scroll');
+    if(scroll) scroll.style.opacity=String(1-ep*1.5);
+
+    // Animate each card morphing to its planet position
+    MM_NODES.slice(1).forEach(n=>{
+      const card=document.getElementById(n.btnId);
+      if(!card) return;
+      const src=morphTargets[n.btnId];
+      if(!src) return;
+
+      // Final planet position
+      const minD=Math.min(W,H);
+      const orbR=[0,minD*0.21,minD*0.34,minD*0.46];
+      const finalX=cx+Math.cos(n.angle)*orbR[n.orbit];
+      const finalY=cy+Math.sin(n.angle)*orbR[n.orbit];
+
+      // Interpolate position
+      const nx=src.x+(finalX-src.x)*ep;
+      const ny=src.y+(finalY-src.y)*ep;
+
+      // Interpolate shape (rect→circle)
+      const startR=Math.min(src.w,src.h)/2;
+      const endR=n.r;
+      const curR=startR+(endR-startR)*ep;
+
+      // Interpolate corners (card has border-radius ~14px)
+      const [r,g,b]=_hexToRgb(n.accent);
+      ctx.save();
+      ctx.globalAlpha=0.85;
+      ctx.translate(nx,ny);
+      ctx.beginPath();
+      ctx.arc(0,0,Math.max(1,curR),0,Math.PI*2);
+      ctx.fillStyle=n.accent;
+      ctx.fill();
+      if(p>0.3){
+        ctx.fillStyle=n.textColor||'#fff';
+        ctx.font=`700 ${Math.round(8+4*ep)}px 'Space Grotesk',sans-serif`;
+        ctx.textAlign='center';ctx.textBaseline='middle';
+        ctx.globalAlpha=Math.max(0,(p-0.3)/0.7)*0.85;
+        ctx.fillText(n.label,0,0);
+      }
+      ctx.restore();
+    });
+
+    // Center: landing logo → black hole
+    const logoEl=document.querySelector('.land-logo');
+    if(logoEl){
+      const lr=logoEl.getBoundingClientRect();
+      const lx=lr.left+lr.width/2, ly=lr.top+lr.height/2;
+      const nx2=lx+(cx-lx)*ep;
+      const ny2=ly+(cy-ly)*ep;
+      const curR=Math.max(1,4+(ep*68));
+      ctx.save();
+      ctx.globalAlpha=ep;
+      const cGrad=ctx.createRadialGradient(nx2,ny2,0,nx2,ny2,curR);
+      cGrad.addColorStop(0,'rgba(0,0,0,0.99)');
+      cGrad.addColorStop(0.8,'rgba(5,5,5,0.96)');
+      cGrad.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath();ctx.arc(nx2,ny2,curR*1.5,0,Math.PI*2);
+      ctx.fillStyle=cGrad;ctx.fill();
+      ctx.restore();
+    }
+
+    if(t<DURATION){
+      requestAnimationFrame(frame);
+    } else {
+      if(scroll){scroll.style.opacity='0';scroll.style.pointerEvents='none';}
+      if(onDone) onDone();
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+function _runMorphOut(onDone){
+  const canvas=$('layout-canvas');
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width, H=canvas.height;
+  const cx=W/2, cy=H/2;
+  const isLight=document.body.classList.contains('light');
+
+  let t=0;
+  const DURATION=40;
+  function easeOut(t){ return 1-Math.pow(1-t,3); }
+
+  function frame(){
+    t++;
+    const p=Math.min(1,t/DURATION);
+    const ep=easeOut(p);
+    ctx.clearRect(0,0,W,H);
+
+    // Redraw fading planets
+    mmOrbitState.slice(1).forEach(n=>{
+      if(!n.accent) return;
+      const [r,g,b]=_hexToRgb(n.accent);
+      ctx.save();
+      ctx.translate(n.x,n.y);
+      ctx.globalAlpha=(1-ep)*0.9;
+      ctx.beginPath();ctx.arc(0,0,n.displayR,0,Math.PI*2);
+      ctx.fillStyle=n.accent;ctx.fill();
+      ctx.restore();
+    });
+
+    // Center implodes
+    const cr=mmOrbitState[0]?.displayR||72;
+    if(cr>1){
+      const implosionR=cr*(1-ep*0.9);
+      ctx.save();
+      ctx.globalAlpha=1-ep;
+      const cGrad=ctx.createRadialGradient(cx,cy,0,cx,cy,implosionR+20);
+      cGrad.addColorStop(0,'rgba(255,255,255,0.08)');
+      cGrad.addColorStop(0.6,'rgba(0,0,0,0.95)');
+      cGrad.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath();ctx.arc(cx,cy,Math.max(1,implosionR+20),0,Math.PI*2);
+      ctx.fillStyle=cGrad;ctx.fill();
+      ctx.restore();
+    }
+
+    // Fade in landing content
+    const scroll=document.querySelector('#landing-screen .land-scroll');
+    if(scroll) scroll.style.opacity=String(ep);
+
+    if(t<DURATION){
+      requestAnimationFrame(frame);
+    } else {
+      canvas.style.display='none';
+      if(scroll){scroll.style.opacity='1';scroll.style.pointerEvents='';}
+      if(onDone) onDone();
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+function clearPreview(){
+  mmPreviewNode=null; mmPreviewAlpha=0; mmPreviewTypeIdx=0;
+  if(mmPreviewTypeTimer){clearInterval(mmPreviewTypeTimer);mmPreviewTypeTimer=null;}
+  if(mmHoverTimer){clearTimeout(mmHoverTimer);mmHoverTimer=null;}
+}
+
+function startPreview(node){
+  if(mmPreviewNode===node) return;
+  clearPreview();
+  mmPreviewNode=node; mmPreviewTypeIdx=0;
+  const fadeIn=setInterval(()=>{ mmPreviewAlpha=Math.min(1,mmPreviewAlpha+0.06); if(mmPreviewAlpha>=1)clearInterval(fadeIn); },16);
+  mmPreviewTypeTimer=setInterval(()=>{ if(mmPreviewTypeIdx<(node.desc||'').length)mmPreviewTypeIdx++; else{clearInterval(mmPreviewTypeTimer);mmPreviewTypeTimer=null;} },20);
+}
+
+function mmMouseMove(e){
+  mmMouse={x:e.clientX,y:e.clientY};
+  let hovNode=null;
+  mmOrbitState.slice(1).forEach(n=>{
+    if(Math.hypot(n.x-e.clientX,n.y-e.clientY)<n.displayR+10) hovNode=n;
+  });
+  $('layout-canvas').style.cursor=hovNode?'pointer':'default';
+  if(hovNode){
+    if(!mmHoverTimer && mmPreviewNode!==hovNode){
+      mmHoverTimer=setTimeout(()=>startPreview(hovNode),500);
+    }
+  } else {
+    if(mmHoverTimer){clearTimeout(mmHoverTimer);mmHoverTimer=null;}
+    if(mmPreviewNode){
+      const fo=setInterval(()=>{ mmPreviewAlpha=Math.max(0,mmPreviewAlpha-0.07); if(mmPreviewAlpha<=0){mmPreviewNode=null;clearInterval(fo);} },16);
+    }
+  }
+}
+
+function mmClick(e){
+  // Launch button in preview
+  if(mmPreviewNode && mmPreviewAlpha>0.7 && mmPreviewTypeIdx>=(mmPreviewNode.desc||'').length){
+    const W=window.innerWidth,H=window.innerHeight;
+    const pw=Math.min(300,W*0.24), ph=200;
+    const px=(W-pw*mmPreviewAlpha)-24, py=(H-ph)/2;
+    const bx=px+12,by=py+ph-44,bw=pw-24,bh=28;
+    if(e.clientX>=bx&&e.clientX<=bx+bw&&e.clientY>=by&&e.clientY<=by+bh){
+      const n=mmPreviewNode; clearPreview(); toggleLayout();
+      setTimeout(()=>document.getElementById(n.btnId)?.click(),500);
+      return;
+    }
+  }
+  // Direct planet click
+  mmOrbitState.slice(1).forEach(n=>{
+    if(Math.hypot(n.x-e.clientX,n.y-e.clientY)<n.displayR+8 && n.btnId){
+      clearPreview(); toggleLayout();
+      setTimeout(()=>document.getElementById(n.btnId)?.click(),500);
+    }
+  });
+}
+
+function toggleLayout(){
+  layoutActive=!layoutActive;
+  window.layoutActive=layoutActive;
+  const btn=$('land-layout-btn');
+  const canvas=$('layout-canvas');
+  const scroll=document.querySelector('#landing-screen .land-scroll');
+
+  if(layoutActive){
+    btn&&(btn.style.background='var(--accent-dim)',btn.style.color='var(--accent)');
+    canvas.addEventListener('mousemove',mmMouseMove);
+    canvas.addEventListener('click',mmClick);
+    canvas.addEventListener('mouseleave',()=>{mmMouse={x:-9999,y:-9999};});
+    initLayout();
+    _runMorphIn(()=>{
+      drawLayout();
+    });
+  } else {
+    btn&&(btn.style.background='',btn.style.color='');
+    canvas.removeEventListener('mousemove',mmMouseMove);
+    canvas.removeEventListener('click',mmClick);
+    clearPreview();
+    if(layoutAnimFrame){cancelAnimationFrame(layoutAnimFrame);layoutAnimFrame=null;window.layoutAnimFrame=null;}
+    _runMorphOut(()=>{
+      mmOrbitState=[];
+    });
+  }
+}
+
+// Keyboard shortcut for dock
+document.addEventListener('keydown',e=>{
+  if(['INPUT','TEXTAREA'].includes(e.target.tagName)) return;
+  if(e.key==='=' && $('landing-screen')?.classList.contains('active')){
+    e.preventDefault(); toggleDockCollapse();
+  }
+});
+
+// ══════════════════════════════════════════════════════════
+// ── IMAGE UPLOAD, VISION & DRAG-DROP ENGINE ──
+// ══════════════════════════════════════════════════════════
+const VISION_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
+let chatPendingImages = [];
+const wsPendingImages = {};
+
+// ── LIGHTBOX ──
+function openLightbox(src){
+  const lb=$('img-lightbox');
+  if(!lb) return;
+  $('img-lightbox-img').src=src;
+  lb.classList.add('open');
+}
+document.addEventListener('click',e=>{ if(e.target&&e.target.id==='img-lightbox')$('img-lightbox').classList.remove('open'); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape')$('img-lightbox')?.classList.remove('open'); });
+
+// ── FILE TO BASE64 ──
+function fileToBase64(file){
+  return new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=e=>{ const d=e.target.result; res({base64:d.split(',')[1],dataUrl:d,name:file.name,type:file.type}); };
+    r.onerror=rej; r.readAsDataURL(file);
+  });
+}
+
+// ── RENDER PREVIEW STRIP ──
+function renderImagePreview(stripId, images, onRemove){
+  const strip=document.getElementById(stripId);
+  if(!strip) return;
+  if(!images.length){ strip.style.display='none'; strip.innerHTML=''; return; }
+  strip.style.display='flex';
+  strip.innerHTML='';
+  images.forEach((img,i)=>{
+    const item=document.createElement('div'); item.className='img-preview-item';
+    const im=document.createElement('img'); im.src=img.dataUrl; im.alt=img.name;
+    im.addEventListener('click',()=>openLightbox(img.dataUrl));
+    const rm=document.createElement('button'); rm.className='img-preview-remove'; rm.textContent='✕';
+    rm.addEventListener('click',e=>{ e.stopPropagation(); onRemove(i); });
+    item.appendChild(im); item.appendChild(rm); strip.appendChild(item);
+  });
+}
+
+function _refreshChatPreview(){
+  renderImagePreview('chat-img-preview', chatPendingImages, i=>{
+    chatPendingImages.splice(i,1); _refreshChatPreview();
+  });
+}
+function _refreshWsPreview(ws){
+  if(!wsPendingImages[ws]) wsPendingImages[ws]=[];
+  renderImagePreview(ws+'-img-preview', wsPendingImages[ws], i=>{
+    wsPendingImages[ws].splice(i,1); _refreshWsPreview(ws);
+  });
+}
+
+// ── ADD IMAGES (shared helper) ──
+async function _addImagesToChat(files, ws){
+  const arr=ws?wsPendingImages[ws]:chatPendingImages;
+  for(const f of files){
+    if(!f.type.startsWith('image/')){ toast('Only images supported'); continue; }
+    if(f.size>12*1024*1024){ toast('Image too large (max 12MB)'); continue; }
+    arr.push(await fileToBase64(f));
+  }
+  if(ws) _refreshWsPreview(ws); else _refreshChatPreview();
+}
+
+// ── WIRE INPUTS & DRAG-DROP ──
+function wireImageUploads(){
+  // Chat image input
+  const ci=$('chat-img-input');
+  if(ci) ci.addEventListener('change',async function(){ await _addImagesToChat(Array.from(this.files)); this.value=''; });
+
+  // Workspace image inputs
+  document.querySelectorAll('.ws-img-input').forEach(input=>{
+    const ws=input.dataset.ws;
+    if(!wsPendingImages[ws]) wsPendingImages[ws]=[];
+    input.addEventListener('change',async function(){ await _addImagesToChat(Array.from(this.files),ws); this.value=''; });
+  });
+
+  // Drag-drop on chat input area
+  const inputArea=$('input-box');
+  if(inputArea){
+    const wrap=inputArea.closest('.input-area')||inputArea.parentElement;
+    _wireDragDrop(wrap, files=>_addImagesToChat(files));
+  }
+
+  // Drag-drop on each workspace input area
+  document.querySelectorAll('.think-input-wrap').forEach(wrap=>{
+    const ta=wrap.querySelector('.think-textarea');
+    if(!ta) return;
+    const ws=ta.id.replace('-input','');
+    _wireDragDrop(wrap, files=>_addImagesToChat(files,ws));
+  });
+
+  // Drag-drop on full screen (fallback)
+  document.addEventListener('dragover',e=>e.preventDefault());
+  document.addEventListener('drop',e=>{
+    e.preventDefault();
+    const files=Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/'));
+    if(!files.length) return;
+    // Determine current screen
+    const active=document.querySelector('.screen.active');
+    const screenId=active?active.id:'';
+    const wsMap={'forge-screen':'forge','flow-screen':'flow','pulse-screen':'pulse','lens-screen':'lens','script-screen':'script','launch-screen':'launch','mind-screen':'mind','connect-screen':'connect','think-screen':'think'};
+    const ws=wsMap[screenId]||null;
+    _addImagesToChat(files, screenId==='chat-screen'?null:ws);
+    toast('🖼️ Image attached!');
+  });
+}
+
+function _wireDragDrop(el, onDrop){
+  // Add overlay div
+  const ov=document.createElement('div'); ov.className='drag-over-overlay';
+  ov.innerHTML='<span style="font-size:13px;color:var(--accent)">Drop image here</span>';
+  el.style.position='relative'; el.appendChild(ov);
+
+  el.addEventListener('dragenter',e=>{ e.preventDefault(); el.classList.add('drag-active'); });
+  el.addEventListener('dragleave',e=>{ if(!el.contains(e.relatedTarget)) el.classList.remove('drag-active'); });
+  el.addEventListener('dragover',e=>e.preventDefault());
+  el.addEventListener('drop',async e=>{
+    e.preventDefault(); el.classList.remove('drag-active');
+    const files=Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/'));
+    if(files.length){ await onDrop(files); toast('🖼️ Image attached!'); }
+  });
+}
+
+// ── SHOW IMAGE IN CHAT ──
+function addImagesAboveMsg(msgEl, images){
+  if(!images||!images.length||!msgEl) return;
+  const mb=msgEl.querySelector('.mb')||msgEl;
+  images.slice().reverse().forEach(img=>{
+    const im=document.createElement('img');
+    im.className='msg-image'; im.src=img.dataUrl; im.alt=img.name;
+    im.addEventListener('click',()=>openLightbox(img.dataUrl));
+    mb.insertBefore(im,mb.firstChild);
+  });
+}
+
+// Init image uploads after DOM ready
+setTimeout(()=>wireImageUploads(), 400);
+
+// ── PATCH sendMsg TO SUPPORT IMAGES ──
+(function(){
+  const _origSendMsg=sendMsg;
+  sendMsg=async function(){
+    const hasImgs=chatPendingImages.length>0;
+    const box=$('input-box');
+    const text=box.value.trim();
+    if(!text&&!hasImgs) return;
+
+    const imgs=[...chatPendingImages];
+    chatPendingImages=[]; _refreshChatPreview();
+
+    box.value=''; box.style.height='auto';
+    if(!chats[cur.id])chats[cur.id]={};
+    if(!chats[cur.id][curMode])chats[cur.id][curMode]=[];
+    const time=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    collapseLastPair();
+    const userEl=addUser(text||(hasImgs?'[image]':''));
+    if(imgs.length&&userEl) addImagesAboveMsg(userEl,imgs);
+    chats[cur.id][curMode].push({role:'user',content:text||(hasImgs?'[image attached]':''),time});
+    saveChats();
+    const tid=showTyping(); $('send-btn').disabled=true;
+    try{
+      const reply=imgs.length ? await _callWithImages(imgs,text) : await callGroq();
+      removeTyping(tid); addAI(reply);
+      chats[cur.id][curMode].push({role:'assistant',content:reply,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
+      saveChats(); updateSidebarTab(curMode); addSuggs(reply);
+    }catch(err){
+      removeTyping(tid);
+      addAI('⚠️ **Error:** '+err.message);
+    }
+    $('send-btn').disabled=false;
+  };
+})();
+
+async function _callWithImages(images,text){
+  const content=images.map(img=>({type:'image_url',image_url:{url:`data:${img.type};base64,${img.base64}`}}));
+  if(text) content.push({type:'text',text});
+  else content.push({type:'text',text:'Please analyse this image.'});
+  const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
+    body:JSON.stringify({model:VISION_MODEL,max_tokens:1800,messages:[{role:'user',content}]})
+  });
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||'API error '+res.status);}
+  const d=await res.json();
+  return d.choices?.[0]?.message?.content||'No response.';
+}
+
+// ── PATCH sendWsMsg TO SUPPORT IMAGES ──
+(function(){
+  const _orig=sendWsMsg;
+  sendWsMsg=async function(ws){
+    const imgs=wsPendingImages[ws]?[...wsPendingImages[ws]]:[];
+    const ta=$(`${ws}-input`);
+    const text=ta.value.trim();
+    if(!text&&!imgs.length) return;
+    const key=apiKey;
+    if(!key){toast('Add an API key first');return;}
+    ta.value=''; autoResize(ta);
+    if(imgs.length){ wsPendingImages[ws]=[]; _refreshWsPreview(ws); }
+
+    const userMsg=appendWsMsg(ws,'user',text||(imgs.length?'[image]':''));
+    if(imgs.length&&userMsg) addImagesAboveMsg(userMsg,imgs);
+    const state=wsState[ws];
+    if(!state.incog){ state.history.push({role:'user',content:text||(imgs.length?'[image attached]':'')}); _saveWsHistory(ws,state.history); }
+
+    const typing=document.createElement('div'); typing.className='think-typing';
+    typing.innerHTML='<span></span><span></span><span></span>';
+    $(`${ws}-msgs`).appendChild(typing);
+    $(`${ws}-msgs`).scrollTop=$(`${ws}-msgs`).scrollHeight;
+
+    const persPrompt=PERSONALITIES[state.personality||'casual']?.prompt||'';
+    const sysPrompt=WS_CONFIG[ws].systemPrompt(state.mode,state.explain)+(persPrompt?' Tone: '+persPrompt:'');
+
+    try{
+      let reply;
+      if(imgs.length){
+        const imgContent=imgs.map(img=>({type:'image_url',image_url:{url:`data:${img.type};base64,${img.base64}`}}));
+        if(text) imgContent.push({type:'text',text});
+        else imgContent.push({type:'text',text:'Please analyse this image.'});
+        const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+          method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+          body:JSON.stringify({model:VISION_MODEL,max_tokens:2000,messages:[{role:'system',content:sysPrompt},{role:'user',content:imgContent}]})
+        });
+        const d=await res.json();
+        reply=d.choices?.[0]?.message?.content||'No response.';
+      } else {
+        const messages=state.incog?[{role:'user',content:text}]:state.history;
+        const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+          method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+          body:JSON.stringify({model:'llama-3.3-70b-versatile',max_tokens:2000,messages:[{role:'system',content:sysPrompt},...messages]})
+        });
+        const d=await res.json();
+        reply=d.choices?.[0]?.message?.content||'No response.';
+      }
+      typing.remove();
+      if(!state.incog){ state.history.push({role:'assistant',content:reply}); _saveWsHistory(ws,state.history); }
+      appendWsMsg(ws,'ai',reply,true);
+    }catch(err){
+      typing.remove();
+      appendWsMsg(ws,'ai','⚠️ Connection error: '+err.message);
+    }
+  };
+})();
+
 // ── PANEL COLOR DOTS ──
 function wirePanelColorDots(){
-  const panelVars={notes:'--notes-accent',tasks:'--tasks-accent',journal:'--journal-accent'};
+  const panelVars={}; // color dots removed
   const storageKeys={notes:'r_notes_color',tasks:'r_tasks_color',journal:'r_journal_color'};
   // Restore saved colors
   Object.entries(storageKeys).forEach(([panel,key])=>{
