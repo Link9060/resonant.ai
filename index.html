@@ -2065,6 +2065,7 @@ body:not(.panels-right) .todo-tab { margin-left: 0; }
         <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:11px;">\ (backslash)</kbd><span>Open / close Notes panel</span>
         <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:11px;">' (apostrophe)</kbd><span>Open / close Journal panel</span>
         <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:11px;">/ (slash)</kbd><span>Open / close Tasks panel</span>
+        <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:11px;">- (minus)</kbd><span>Open / close Files panel</span>
         <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:11px;">= (equals)</kbd><span>Collapse / expand the bottom dock (landing page only)</span>
         <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:11px;">1 – 9</kbd><span>Open workspace 1–9 directly (landing page only)</span>
         <kbd style="background:var(--bg3);border:1px solid var(--border2);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:11px;">0</kbd><span>Open workspace 10 — Resonant. Connect (landing page only)</span>
@@ -3922,6 +3923,14 @@ document.addEventListener('keydown', e=>{
     }
     else{const nd2=$('notes-panel').classList.contains('open');if(nd2){smartOpenPanel('todo');setTimeout(()=>{applyTodoSide();openPanelWithAnim(t,todoOnRight);renderTodo();},180);}else{applyTodoSide();openPanelWithAnim(t,todoOnRight);renderTodo();}}
   }
+  if(e.key==='-'){
+    e.preventDefault();
+    const fp=$('files-panel');
+    if(fp){
+      if(fp.classList.contains('open')){fp.classList.remove('open');}
+      else{fp.classList.add('open');renderFilesList();}
+    }
+  }
 });
 
 // ═══════════════════════════════════════════════════════
@@ -4528,6 +4537,17 @@ function deleteSelectedWsMsgs(ws){
   if(!confirm('Delete '+checked.length+' message(s)?'))return;
   checked.forEach(cb=>cb.closest('.think-msg-wrap')?.remove());
   exitWsSelMode(ws);
+  // Persist: rebuild history from remaining DOM messages
+  const state=wsState[ws];
+  const mode=state.mode;
+  const remaining=[];
+  document.querySelectorAll(`#${ws}-msgs .think-msg`).forEach(el=>{
+    const role=el.classList.contains('user')?'user':'assistant';
+    const content=el.querySelector('.think-msg-body')?.innerText||el.innerText||'';
+    remaining.push({role,content});
+  });
+  state.history=remaining;
+  _saveWsHistory(ws,remaining);
   toast('Deleted');
 }
 
@@ -4564,12 +4584,28 @@ function deleteSelectedMsgs(){
     delete msgStore[id];
   });
   exitSelMode();
+  _persistBuildChatDeletion();
   toast('Deleted '+checked.length+' message(s)');
 }
 function deleteSingleMsg(id){
   if(!confirm('Delete this message?'))return;
   const el=$(id);if(el)el.remove();
   delete msgStore[id];
+  // Persist deletion to localStorage
+  _persistBuildChatDeletion();
+}
+
+function _persistBuildChatDeletion(){
+  if(!cur||!curMode) return;
+  // Rebuild conv from remaining DOM messages
+  if(!chats[cur.id]) chats[cur.id]={};
+  const remaining=[];
+  $('msgs').querySelectorAll('.msg').forEach(el=>{
+    const id=el.id;
+    if(msgStore[id]){remaining.push({role:msgStore[id].role,content:msgStore[id].text,time:msgStore[id].time||''});}
+  });
+  chats[cur.id][curMode]=remaining;
+  saveChats();
 }
 
 // ═══════════════════════════════════════════════════════
@@ -5943,35 +5979,45 @@ let mmMouse={x:-9999,y:-9999}, mmFrame=0, mmOrbitState=[];
 
 // Site color palette — matches exactly what's in the CSS vars
 const SITE_COLORS = {
-  build:   {accent:'#e8520a', dim:'rgba(232,82,10,0.12)',   border:'rgba(232,82,10,0.25)',   label:'Resonant. Build',   icon:'🔧', sub:'Hardware & Prototyping',   modes:['General','Research','Critique','Brainstorm']},
-  learn:   {accent:'#7aadff', dim:'rgba(122,173,255,0.12)',  border:'rgba(122,173,255,0.25)', label:'Resonant. Learn',   icon:'🎓', sub:'Accelerated Learning',      modes:['Lock In','Feynman','Flashcard Gen','Deep Research']},
-  forge:   {accent:'#fb923c', dim:'rgba(251,146,60,0.12)',   border:'rgba(251,146,60,0.25)',  label:'Resonant. Forge',   icon:'🔩', sub:'Software Engineering',      modes:['Debugger','Architect','System Design','API']},
-  create:  {accent:'#e879f9', dim:'rgba(232,121,249,0.12)',  border:'rgba(232,121,249,0.25)', label:'Resonant. Create',  icon:'✍️', sub:'Content & Creative',        modes:['Writing','Visual','Branding','Scripts']},
-  pulse:   {accent:'#34d399', dim:'rgba(52,211,153,0.12)',   border:'rgba(52,211,153,0.25)',  label:'Resonant. Pulse',   icon:'💪', sub:'Performance Science',        modes:['Training','Nutrition','Recovery','Biomech']},
-  lens:    {accent:'#fbbf24', dim:'rgba(251,191,36,0.12)',   border:'rgba(251,191,36,0.25)',  label:'Resonant. Lens',    icon:'📊', sub:'Market Intelligence',         modes:['Trends','Competitors','Pitch','Finance']},
-  launch:  {accent:'#fb7185', dim:'rgba(251,113,133,0.12)',  border:'rgba(251,113,133,0.25)', label:'Resonant. Launch',  icon:'🚀', sub:'Career Strategy',            modes:['Resume','Outreach','Interview','Negotiate']},
-  script:  {accent:'#63b3ed', dim:'rgba(99,179,237,0.12)',   border:'rgba(99,179,237,0.25)',  label:'Resonant. Script',  icon:'📐', sub:'CAD Scripting',              modes:['Auto-Fusion','Live-SCAD','Geo-Math','STEP']},
-  mind:    {accent:'#6ee7b7', dim:'rgba(110,231,183,0.12)',  border:'rgba(110,231,183,0.25)', label:'Resonant. Mind',    icon:'🧘', sub:'Mental Wellness',            modes:['Spiral Stop','Burnout','Vent','Anxiety']},
-  connect: {accent:'#93c5fd', dim:'rgba(147,197,253,0.12)',  border:'rgba(147,197,253,0.25)', label:'Resonant. Connect', icon:'💬', sub:'Social Intelligence',         modes:['Vibe Check','Conflict','Small Talk','Tone']},
+  build:   {accent:'#e8520a',dim:'rgba(232,82,10,0.12)',  border:'rgba(232,82,10,0.25)',  label:'Resonant. Build',  icon:'🔧',sub:'Hardware & Prototyping', modes:['General','Research','Critique','Brainstorm'],
+            desc:'Hardware engineering, mechanical design & physical prototyping. CAD, materials, manufacturing and stress analysis.'},
+  learn:   {accent:'#7aadff',dim:'rgba(122,173,255,0.12)',border:'rgba(122,173,255,0.25)',label:'Resonant. Learn',  icon:'🎓',sub:'Accelerated Learning',   modes:['Lock In','Feynman','Flashcard Gen','Deep Research'],
+            desc:'Lock In, Feynman Technique, Flashcard Gen, Deep Research. Built for students who need precision without waste.'},
+  forge:   {accent:'#fb923c',dim:'rgba(251,146,60,0.12)', border:'rgba(251,146,60,0.25)', label:'Resonant. Forge',  icon:'🔩',sub:'Software Engineering',  modes:['Debugger','Architect','System Design','API'],
+            desc:'Senior-level coding AI. Debugger, Code Architect, System Design, API Integration. Production-quality code every time.'},
+  create:  {accent:'#e879f9',dim:'rgba(232,121,249,0.12)',border:'rgba(232,121,249,0.25)',label:'Resonant. Create', icon:'✍️',sub:'Content & Creative',    modes:['Writing','Visual','Branding','Scripts'],
+            desc:'Essays, brand identity, video scripts, layout design. Sharp editorial instinct — no AI-sounding output, ever.'},
+  pulse:   {accent:'#34d399',dim:'rgba(52,211,153,0.12)', border:'rgba(52,211,153,0.25)', label:'Resonant. Pulse',  icon:'💪',sub:'Performance Science',  modes:['Training','Nutrition','Recovery','Biomech'],
+            desc:'Training, nutrition, competition, recovery, biomechanics. Evidence-based, sport-specific, always precise.'},
+  lens:    {accent:'#fbbf24',dim:'rgba(251,191,36,0.12)', border:'rgba(251,191,36,0.25)', label:'Resonant. Lens',   icon:'📊',sub:'Market Intelligence',   modes:['Trends','Competitors','Pitch','Finance'],
+            desc:'Trend forecasting, competitor mapping, pitch decks, financial modeling. Venture analyst meets strategy consultant.'},
+  launch:  {accent:'#fb7185',dim:'rgba(251,113,133,0.12)',border:'rgba(251,113,133,0.25)',label:'Resonant. Launch', icon:'🚀',sub:'Career Strategy',       modes:['Resume','Outreach','Interview','Negotiate'],
+            desc:'Resume tailoring, cold outreach, interview simulation, offer negotiation. Understands how hiring actually works.'},
+  script:  {accent:'#63b3ed',dim:'rgba(99,179,237,0.12)', border:'rgba(99,179,237,0.25)', label:'Resonant. Script', icon:'📐',sub:'CAD Scripting',          modes:['Auto-Fusion','Live-SCAD','Geo-Math','STEP'],
+            desc:'Generative geometry, Fusion 360 Python, OpenSCAD, parametric modeling. Full working scripts, zero skeleton code.'},
+  mind:    {accent:'#6ee7b7',dim:'rgba(110,231,183,0.12)',border:'rgba(110,231,183,0.25)',label:'Resonant. Mind',   icon:'🧘',sub:'Mental Wellness',       modes:['Spiral Stop','Burnout','Vent','Anxiety'],
+            desc:'CBT spiral stopping, burnout radar, vent mode, anxiety prep. Evidence-based, warm, never clinical.'},
+  connect: {accent:'#93c5fd',dim:'rgba(147,197,253,0.12)',border:'rgba(147,197,253,0.25)',label:'Resonant. Connect',icon:'💬',sub:'Social Intelligence',    modes:['Vibe Check','Conflict','Small Talk','Tone'],
+            desc:'Vibe check, conflict mediation, small talk, tone polish. Understands subtext — scripts that actually work.'},
 };
 
-// 3 rings, mathematically placed
+// 3 rings, mathematically placed — bigger nodes, tighter orbits
 const MM_NODES = [
-  {id:'center', btnId:null, orbit:0, baseAngle:0, speed:0, r:64,
+  {id:'center', btnId:null, orbit:0, baseAngle:0, speed:0, r:82,
    desc:'Your AI ecosystem. 10 specialized workspaces, each purpose-built for a different kind of thinking.'},
   // Ring 1 — 3 nodes, 120° apart, slow clockwise
-  {id:'build',  btnId:'land-design-btn', orbit:1, baseAngle:Math.PI*0,       speed:0.00025,  r:24},
-  {id:'learn',  btnId:'land-think-btn',  orbit:1, baseAngle:Math.PI*0.667,   speed:0.00025,  r:27},
-  {id:'forge',  btnId:'land-forge-btn',  orbit:1, baseAngle:Math.PI*1.333,   speed:0.00025,  r:23},
+  {id:'build',  btnId:'land-design-btn', orbit:1, baseAngle:Math.PI*0,       speed:0.00025,  r:34},
+  {id:'learn',  btnId:'land-think-btn',  orbit:1, baseAngle:Math.PI*0.667,   speed:0.00025,  r:38},
+  {id:'forge',  btnId:'land-forge-btn',  orbit:1, baseAngle:Math.PI*1.333,   speed:0.00025,  r:32},
   // Ring 2 — 4 nodes, 90° apart, slow counter-clockwise
-  {id:'create', btnId:'land-flow-btn',   orbit:2, baseAngle:Math.PI*0.25,    speed:-0.00018, r:22},
-  {id:'pulse',  btnId:'land-pulse-btn',  orbit:2, baseAngle:Math.PI*0.75,    speed:-0.00018, r:22},
-  {id:'lens',   btnId:'land-lens-btn',   orbit:2, baseAngle:Math.PI*1.25,    speed:-0.00018, r:20},
-  {id:'launch', btnId:'land-launch-btn', orbit:2, baseAngle:Math.PI*1.75,    speed:-0.00018, r:20},
+  {id:'create', btnId:'land-flow-btn',   orbit:2, baseAngle:Math.PI*0.25,    speed:-0.00018, r:30},
+  {id:'pulse',  btnId:'land-pulse-btn',  orbit:2, baseAngle:Math.PI*0.75,    speed:-0.00018, r:30},
+  {id:'lens',   btnId:'land-lens-btn',   orbit:2, baseAngle:Math.PI*1.25,    speed:-0.00018, r:28},
+  {id:'launch', btnId:'land-launch-btn', orbit:2, baseAngle:Math.PI*1.75,    speed:-0.00018, r:28},
   // Ring 3 — 3 nodes, 120° apart, slightly faster
-  {id:'script', btnId:'land-script-btn', orbit:3, baseAngle:Math.PI*0.333,   speed:0.00038,  r:17},
-  {id:'mind',   btnId:'land-mind-btn',   orbit:3, baseAngle:Math.PI*1.0,     speed:0.00038,  r:18},
-  {id:'connect',btnId:'land-connect-btn',orbit:3, baseAngle:Math.PI*1.667,   speed:0.00038,  r:17},
+  {id:'script', btnId:'land-script-btn', orbit:3, baseAngle:Math.PI*0.333,   speed:0.00038,  r:25},
+  {id:'mind',   btnId:'land-mind-btn',   orbit:3, baseAngle:Math.PI*1.0,     speed:0.00038,  r:26},
+  {id:'connect',btnId:'land-connect-btn',orbit:3, baseAngle:Math.PI*1.667,   speed:0.00038,  r:24},
 ];
 
 function _hexRgb(hex){ const h=hex.replace('#',''); return[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]; }
@@ -6116,7 +6162,7 @@ function drawCenter(ctx, cx, cy, r, frame, isLight){
 function initLayout(){
   const W=window.innerWidth, H=window.innerHeight, cx=W/2, cy=H/2;
   const minD=Math.min(W,H);
-  const orbR=[0, minD*0.185, minD*0.305, minD*0.415];
+  const orbR=[0, minD*0.20, minD*0.32, minD*0.42];
   mmOrbitState=MM_NODES.map((n,i)=>({
     ...n, cx, cy,
     x:i===0?cx:cx+Math.cos(n.baseAngle)*orbR[n.orbit||0],
@@ -6273,7 +6319,7 @@ function _drawPreviewPanel(ctx,W,H,isLight){
   });
 
   // Description — typewriter, DM Sans like .lc-tag
-  const typed=(n.desc||'').substring(0,mmPreviewTypeIdx);
+  const typed=(n._desc||n.desc||'').substring(0,mmPreviewTypeIdx);
   ctx.font="11px 'DM Sans',sans-serif";
   ctx.fillStyle=isLight?'rgba(0,0,0,0.60)':'rgba(255,255,255,0.55)';
   ctx.textAlign='left';
@@ -6289,7 +6335,7 @@ function _drawPreviewPanel(ctx,W,H,isLight){
   }
 
   // Launch button — matches .bp / .s-btn site button style
-  if(mmPreviewTypeIdx>=(n.desc||'').length){
+  if(mmPreviewTypeIdx>=(n._desc||n.desc||'').length){
     const bx=px+12,by=py+ph-36,bw=pw-24,bh=26;
     ctx.beginPath();ctx.roundRect(bx,by,bw,bh,6);
     ctx.fillStyle=sc.accent;ctx.fill();
@@ -6309,8 +6355,12 @@ function clearPreview(){
 function startPreview(node){
   if(mmPreviewNode===node) return;
   clearPreview();mmPreviewNode=node;
+  // Get desc from SITE_COLORS since MM_NODES don't all have desc
+  const sc=SITE_COLORS[node.id];
+  const fullDesc=(sc&&sc.desc)||node.desc||'';
+  node._desc=fullDesc; // cache on node for _drawPreviewPanel
   const fi=setInterval(()=>{mmPreviewAlpha=Math.min(1,mmPreviewAlpha+0.05);if(mmPreviewAlpha>=1)clearInterval(fi);},16);
-  mmPreviewTypeTimer=setInterval(()=>{if(mmPreviewTypeIdx<(node.desc||'').length)mmPreviewTypeIdx++;else{clearInterval(mmPreviewTypeTimer);mmPreviewTypeTimer=null;}},20);
+  mmPreviewTypeTimer=setInterval(()=>{if(mmPreviewTypeIdx<fullDesc.length)mmPreviewTypeIdx++;else{clearInterval(mmPreviewTypeTimer);mmPreviewTypeTimer=null;}},20);
 }
 
 function mmMouseMove(e){
@@ -6345,7 +6395,7 @@ function mmClick(e){
   });
 }
 
-// Morph: cards → orbital nodes
+// Morph: cards twist-compress → orbital nodes
 function _runMorphIn(onDone){
   const canvas=$('layout-canvas'),ctx=canvas.getContext('2d');
   canvas.style.display='block';canvas.style.opacity='1';
@@ -6354,8 +6404,9 @@ function _runMorphIn(onDone){
   const isLight=document.body.classList.contains('light');
   const scroll=document.querySelector('#landing-screen .land-scroll');
   const minD=Math.min(W,H);
-  const orbR=[0,minD*0.185,minD*0.305,minD*0.415];
-  // Snapshot card positions
+  const orbR=[0, minD*0.20, minD*0.32, minD*0.42];
+
+  // Snapshot card positions before fade
   const cardPos={};
   MM_NODES.slice(1).forEach(n=>{
     const el=document.getElementById(n.btnId);
@@ -6363,53 +6414,96 @@ function _runMorphIn(onDone){
   });
   const logoEl=document.querySelector('.land-logo');
   const logoPos=logoEl?logoEl.getBoundingClientRect():null;
-  let t=0;const FRAMES=52;
-  const ease=p=>p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+
+  let t=0;const FRAMES=64;
+  const ease=p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2; // cubic ease in-out
 
   (function frame(){
     t++;const p=Math.min(1,t/FRAMES),ep=ease(p);
     ctx.clearRect(0,0,W,H);
-    if(scroll)scroll.style.opacity=String(Math.max(0,1-ep*2));
-    // Cards morph to nodes
+
+    // Fade out card grid (fast, first 35% of anim)
+    if(scroll) scroll.style.opacity=String(Math.max(0,1-p*3.0));
+
     MM_NODES.slice(1).forEach(n=>{
-      const src=cardPos[n.btnId];if(!src) return;
-      const sc=SITE_COLORS[n.id];if(!sc) return;
-      const fx=cx+Math.cos(n.baseAngle)*orbR[n.orbit],fy=cy+Math.sin(n.baseAngle)*orbR[n.orbit];
-      const nx=src.x+(fx-src.x)*ep,ny=src.y+(fy-src.y)*ep;
-      // Lerp from card size to node size
-      const srcR=Math.min(src.w,src.h)*0.42;
-      const tgtR=n.r;
-      const cr=srcR+(tgtR-srcR)*ep;
+      const src=cardPos[n.btnId]; if(!src) return;
+      const sc=SITE_COLORS[n.id]; if(!sc) return;
       const [r,g,b]=_hexRgb(sc.accent);
-      ctx.save();ctx.globalAlpha=0.88;
-      // Body
-      const bg=ctx.createRadialGradient(nx-cr*0.3,ny-cr*0.3,0,nx,ny,cr);
-      bg.addColorStop(0,isLight?'rgba(230,230,228,0.98)':'rgba(26,26,26,0.98)');
-      bg.addColorStop(1,isLight?'rgba(218,218,215,0.96)':'rgba(16,16,16,0.96)');
-      ctx.beginPath();ctx.arc(nx,ny,Math.max(1,cr),0,Math.PI*2);ctx.fillStyle=bg;ctx.fill();
-      // Accent border
-      ctx.strokeStyle=sc.accent;ctx.lineWidth=1.2;ctx.stroke();
-      // Accent arc
-      ctx.beginPath();ctx.arc(nx,ny,cr,Math.PI*1.15,Math.PI*1.85);
-      ctx.strokeStyle=sc.accent;ctx.lineWidth=1.8;ctx.stroke();
-      // Icon fade in
-      if(ep>0.5&&cr>12){
-        ctx.font=`${Math.round(cr*0.55)}px serif`;
-        ctx.textAlign='center';ctx.textBaseline='middle';
-        ctx.globalAlpha=(ep-0.5)*2*0.88;
-        ctx.fillText(sc.icon,nx,ny);
+      const fx=cx+Math.cos(n.baseAngle)*orbR[n.orbit];
+      const fy=cy+Math.sin(n.baseAngle)*orbR[n.orbit];
+
+      // Move toward final position
+      const nx=src.x+(fx-src.x)*ep;
+      const ny=src.y+(fy-src.y)*ep;
+
+      // PHASE 1 (p 0→0.5): card squishes — width collapses, height shrinks, corners round
+      const squishP=Math.min(1,p*2.2);
+      // PHASE 2 (p 0.4→1): circle grows to final size
+      const growP=Math.max(0,(p-0.4)/0.6);
+
+      // Half-extents interpolating from card rect → circle
+      const hw=src.w*0.5*(1-squishP)+n.r*squishP;
+      const hh=src.h*0.5*(1-squishP)*0.55+n.r*squishP; // height collapses faster
+      const cornerR=Math.min(hw,hh)*squishP; // corners get rounder
+
+      // Final circle radius grows from 0
+      const finalR=n.r*(0.2+growP*0.8);
+
+      // Twist angle — cards rotate as they compress
+      const twistDir=n.orbit===2?-1:1;
+      const twist=squishP*Math.PI*0.35*twistDir;
+
+      ctx.save();
+      ctx.globalAlpha=Math.min(1,p<0.03?p*30:1);
+      ctx.translate(nx,ny);
+      ctx.rotate(twist);
+
+      if(squishP<0.92){
+        // Squishing card phase
+        ctx.beginPath();
+        if(ctx.roundRect){ctx.roundRect(-hw,-hh,hw*2,hh*2,Math.max(4,cornerR));}
+        else{ctx.rect(-hw,-hh,hw*2,hh*2);}
+        const bg=ctx.createLinearGradient(-hw,-hh,hw,hh);
+        bg.addColorStop(0,isLight?'rgba(235,235,233,0.97)':'rgba(28,28,28,0.97)');
+        bg.addColorStop(1,isLight?'rgba(220,220,217,0.95)':'rgba(18,18,18,0.95)');
+        ctx.fillStyle=bg;ctx.fill();
+        ctx.strokeStyle=`rgba(${r},${g},${b},${0.5+squishP*0.5})`;
+        ctx.lineWidth=1.5;ctx.stroke();
+        // Top accent line
+        ctx.beginPath();ctx.moveTo(-hw*0.6,-hh+0.5);ctx.lineTo(hw*0.6,-hh+0.5);
+        ctx.strokeStyle=sc.accent;ctx.lineWidth=2;ctx.stroke();
+        // Icon appears during squish
+        if(squishP>0.35&&Math.min(hw,hh)>10){
+          ctx.rotate(-twist); // counter-rotate icon so it stays upright
+          ctx.font=`${Math.round(Math.min(hw,hh)*0.75)}px serif`;
+          ctx.textAlign='center';ctx.textBaseline='middle';
+          ctx.globalAlpha=(squishP-0.35)/0.65;
+          ctx.fillText(sc.icon,0,0);
+        }
+      } else {
+        // Full circle — draw as final node
+        ctx.rotate(-twist);
+        const tmp={...n,x:0,y:0,displayR:Math.max(3,finalR),hovered:false};
+        drawNode(ctx,tmp,0,0,t,isLight);
       }
       ctx.restore();
     });
-    // Logo shrinks into center node
+
+    // Logo contracts and darkens into center node
     if(logoPos){
       const lx=logoPos.left+logoPos.width/2,ly=logoPos.top+logoPos.height/2;
       const bx=lx+(cx-lx)*ep,by=ly+(cy-ly)*ep;
-      const br=Math.max(2,ep*64);
-      if(br>2) drawCenter(ctx,bx,by,br,t,isLight);
+      const br=Math.max(3,ep*82);
+      ctx.save();ctx.globalAlpha=Math.min(1,ep*1.5);
+      drawCenter(ctx,bx,by,br,t,isLight);
+      ctx.restore();
     }
+
     if(t<FRAMES) requestAnimationFrame(frame);
-    else{if(scroll){scroll.style.opacity='0';scroll.style.pointerEvents='none';}if(onDone)onDone();}
+    else{
+      if(scroll){scroll.style.opacity='0';scroll.style.pointerEvents='none';}
+      if(onDone)onDone();
+    }
   })();
 }
 
